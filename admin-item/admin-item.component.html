@@ -1,0 +1,2163 @@
+<link rel="stylesheet" type="text/css"
+  href="https://uscensus.sharepoint.com/teams/ADEP/apps/csit/SitePages/PrimeNG/primeicons.css" />
+<link rel="stylesheet" type="text/css"
+  href="https://uscensus.sharepoint.com/teams/ADEP/apps/csit/SitePages/PrimeNG/theme.css" />
+<link rel="stylesheet" type="text/css"
+  href="https://uscensus.sharepoint.com/teams/ADEP/apps/csit/SitePages/PrimeNG/primeng.min.css" />
+
+
+<p-toast [style]="{marginTop: '100px'}" position="top-left"></p-toast>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="large" color="#fff" type="timer"></ngx-spinner>
+<div class='' style="margin: auto; margin-top: 150px;" *ngIf="showTable == true">
+  <div>
+    <!-- <button id="back" (click)="router.navigate(['/adminInventory'])" type="button" class="btn pi pi-chevron-left"></button> -->
+    <button title="Back to Inventory" id="back" (click)="router.navigate(['/adminInventory'])" type="button" class="btn pi pi-chevron-left"></button>
+    <button title="Print this page" id="print" (click)="print()" type="button" class="btn pi pi-print"></button>
+  </div>
+  <h2 style="color: #fff !important;text-align: center; padding: 25px;">{{surveyItem.SurveyYear}} - {{ surveyItem.SurveyName }} (<i class="pi pi-user" title="Admin" style="position: relative; top: 8px;"></i>)</h2>
+  <p-tabView>
+    <p-tabPanel header="Visitor View" [leftIcon]="">
+
+      <div class="itemContainer">
+        <p-panel header="OMB" [collapsed]='true' [toggleable]="true"
+          [style]="{'margin-bottom':'20px', 'box-shadow':'rgb(51, 51, 51) 3px 4px 16px -3px'}">
+
+          <div class="sectionContainer" style="height: 195px;">
+            <div style="float: left; width: 50%; height: auto;">
+
+              <div class="">
+                <div><label style="min-width: 90%;">OMB Number:</label></div>
+                <div><input pInputText [readonly]="true" class="ombNumber" style="width:90%;"
+                    [value]="(surveyItem.OMBNumber) ? surveyItem.OMBNumber : ''"></div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">OMB Exp. Date:</label></div>
+                <div><input pInputText [readonly]="true" class="ombExp" style="width:90%;"
+                    [value]="(surveyItem.OMBExpCalc) ? surveyItem.OMBExpCalc : ''"></div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Survey Name II:</label></div>
+                <div><input pInputText [readonly]="true" id="surveyName2" style="width:90%;"
+                    [value]="(surveyItem.OMBSurveyNameII) ? surveyItem.OMBSurveyNameII : ''"></div>
+              </div>
+            </div>
+
+            <div style="float: right; width: 50%; height: auto;">
+
+              <div class="">
+                <div><label style="min-width: 90%;">Acronym:</label></div>
+                <div><input pInputText [readonly]="true" id="acronym" style="width:90%;"
+                    [value]="(surveyItem.Acronym) ? surveyItem.Acronym : ''"></div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Data Collection Mode:</label></div>
+                <div><input pInputText [readonly]="true" class="DataCollectionMode" style="width:90%;"
+                    [value]="(surveyItem.MAINDataCollectionMode) ? surveyItem.MAINDataCollectionMode : ''"></div>
+              </div>
+            </div>
+          </div>
+
+
+        </p-panel>
+        <p-panel header="General Information" [collapsed]='true' [toggleable]="true"
+        [style]="{'margin-bottom':'20px', 'box-shadow':'rgb(51, 51, 51) 3px 4px 16px -3px'}">
+        <div class="sectionContainer" style="height: 540px;">
+          <div style="float: left; width: 50%; height: auto;">
+            <div class="" style="margin-top:0px;">
+              <div style=""><label>Mandatory/Voluntary:</label></div>
+              <div style=""><input [readonly]="true" id="mandatoryVoluntary" style="width:90%;"
+                  [value]="surveyItem.OMBMandatoryVoluntary.value || surveyItem.OMBMandatoryVoluntary"></div>
+            </div>
+            <div class="" style="margin-top:0px;">
+              <div style=""><label>Frequency of Reporting:</label></div>
+              <div style=""><input [readonly]="true" id="frequencyOfReporting" style="width:90%;"
+                  [value]="surveyItem.OMBFrequencyOfReporting.value || surveyItem.OMBFrequencyOfReporting"></div>
+            </div>
+            <div class="" style="margin-top:0px;">
+              <div style=""><label>Number of Respondents:</label></div>
+              <div style=""><input [readonly]="true" id="numOfRespondents" style="width:90%;"
+                  [value]="(surveyItem.OMBNumofRespondents) ? surveyItem.OMBNumofRespondents : ''"></div>
+            </div>
+            <div class="" style="margin-top:0px;">
+              <div style=""><label>Survey Indicator:</label></div>
+              <div style=""><input [readonly]="true" class="indicator" style="width:90%;"
+                  [value]="surveyItem.MAINIndicator.value || surveyItem.MAINIndicator"></div>
+            </div>
+            <div class="" style="margin-top:0px;">
+              <div style=""><label>Reimbursable:</label></div>
+              <div style=""><input [readonly]="true" class="reimbursable" style="width:90%;"
+                  [value]="(surveyItem.MAINReimbursable.value) ? surveyItem.MAINReimbursable.value : ((surveyItem.MAINReimbursable) ? surveyItem.MAINReimbursable : '')"></div>
+            </div>
+            <div class="" style="margin-top:0px;" *ngIf="surveyItem.MAINReimbursable.value == 'Yes' || surveyItem.MAINReimbursable == 'Yes'">
+              <div style=""><label>Sponsor:</label></div>
+              <div style=""><input [readonly]="true" class="sponsor" style="width:90%;"
+                  [value]="(surveyItem.MAINSponsor) ? surveyItem.MAINSponsor : ''"></div>
+            </div>
+            <div class="" style="margin-top:0px;">
+              <div style=""><label>Is this a sample survey?</label></div>
+              <div style=""><input [readonly]="true" class="sampleTaken" style="width:90%;"
+                  [value]="surveyItem.MAINSampleTaken.value || surveyItem.MAINSampleTaken"></div>
+            </div>
+            <div class="" style="margin-top:0px;">
+              <div style=""><label>When was the last sample taken?</label></div>
+              <div style=""><input [readonly]="true" class="sampleYear" style="width:90%;"
+                  [value]="(surveyItem.MAINSampleYear) ? surveyItem.MAINSampleYear : ''"></div>
+            </div>
+            <div class="" style="margin-top:0px;">
+              <div style=""><label>Sample Size:</label></div>
+              <div style=""><input id="sampleSize" [readonly]="true" style="width:90%;"
+                  [value]="(surveyItem.HUBSampleSize) ? surveyItem.HUBSampleSize : ''"></div>
+            </div>
+          </div>
+          <div style="float: right; width: 50%; height: auto;">
+            <div class="" style="margin-top:0px;">
+              <div style=""><label>Authority:</label></div>
+              <div style=""><textarea [readonly]="true" style="width:90%; height:100px;" id="authority"
+                  [value]="(surveyItem.OMBAuthority) ? surveyItem.OMBAuthority : ''"></textarea></div>
+            </div>
+            <div class="" style="margin-top:0px;">
+              <div style=""><label>Confidentiality:</label></div>
+              <div style=""><textarea [readonly]="true" id="confidentiality" style="width:90%; height:100px;"
+                  [value]="(surveyItem.MAINConfidentiality) ? surveyItem.MAINConfidentiality : ''"></textarea></div>
+            </div>
+            <div class="" style="">
+              <div class="" style="margin-top:0px; ">
+                <div style=""><label>Form Number Paths:</label><br /><textarea [readonly]="true"
+                    style="width:90%; height:100px;" id="formNumPaths"
+                    [value]="(surveyItem.OMBFormNumPaths) ? surveyItem.OMBFormNumPaths : ''"></textarea></div>
+              </div>
+              <div class="" style="margin-top:0px;">
+                <div style=""><label>Avg. Time to Complete:</label><br /><textarea [readonly]="true"
+                    style="width:90%; height:100px;" id="avgTimeToComplete"
+                    [value]="(surveyItem.OMBAvgTimetoComplete) ? surveyItem.OMBAvgTimetoComplete : ''"></textarea></div>
+                <div style=""></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p-panel>
+        <p-panel header="Contact Information" [collapsed]='true' [toggleable]="true"
+          [style]="{'margin-bottom':'20px', 'box-shadow':'rgb(51, 51, 51) 3px 4px 16px -3px'}">
+
+
+          <div class="sectionContainer" style="height: 265px;">
+
+
+            <div style="float: left; width: 50%; height: auto;">
+
+
+              <div class="">
+                <div><label style="min-width: 90%;">Directorate:</label></div>
+                <div><input pInputText [readonly]="true" id="directorate" style="width:90%;"
+                    [value]="(surveyItem.OMBDirectorate) ? surveyItem.OMBDirectorate : ''"></div>
+              </div>
+
+
+              <div class="">
+                <div><label style="min-width: 90%;">Division:</label></div>
+                <div><input pInputText [readonly]="true" id="division" style="width:90%;"
+                    [value]="(surveyItem.OMBDivision) ? surveyItem.OMBDivision : ''"></div>
+              </div>
+
+
+              <div class="">
+                <div><label style="min-width: 90%;">Bureau Contact:</label></div>
+                <div><input pInputText [readonly]="true" class="bureauContact" style="width:90%;"
+                    [value]="(surveyItem.MAINBureauContact) ? surveyItem.MAINBureauContact : ''"></div>
+              </div>
+
+              <div class="">
+                <div><label style="min-width: 90%;">Bureau Contact Email:</label></div>
+                <div><input pInputText [readonly]="true" [readonly]="true" class="bureauContactEmail" style="width:90%;"
+                    [value]="(surveyItem.MAINBureauContactEmail) ? surveyItem.MAINBureauContactEmail : ''"></div>
+              </div>
+
+            </div>
+            <div style="float: right; width: 50%; height: auto;">
+
+              <div class="">
+                <div><label style="min-width: 90%;">Bureau Contact Number:</label></div>
+                <div><input pInputText [readonly]="true" class="bureauContactNumber" style="width:90%;"
+                    [value]="(surveyItem.MAINBureauContactNumber) ? surveyItem.MAINBureauContactNumber : ''"></div>
+              </div>
+
+
+              <div class="">
+                <div><label style="min-width: 90%;">NPC/HQ Phone Number:</label></div>
+                <div><input pInputText [readonly]="true" class="npcPhoneNumber" style="width:90%;"
+                    [value]="(surveyItem.MAINNPCPhoneNumber) ? surveyItem.MAINNPCPhoneNumber : ''"></div>
+              </div>
+
+              <div class="">
+                <div><label style="min-width: 90%;">NPC/HQ Hours of Operations:</label></div>
+                <div><input pInputText [readonly]="true" style="width:90%;"
+                    [value]="(surveyItem.MAINNPCHours) ? surveyItem.MAINNPCHours : ''"></div>
+              </div>
+
+            </div>
+
+
+          </div>
+
+
+        </p-panel>
+        <p-panel header="Collections" [collapsed]='true' [toggleable]="true"
+          [style]="{'margin-bottom':'20px', 'box-shadow':'rgb(51, 51, 51) 3px 4px 16px -3px'}">
+          <div class="" style="padding: 15px 0px 20px 20px !important; height: 100px;">
+            <div style="display: inline-flex">
+              <div style="width: 270px">
+                <label style="">Frequency Of Reporting:</label>
+                <br />
+                <input pInputText [readonly]="true" class="" style=""
+                  [value]="surveyItem.OMBFrequencyOfReporting.value || surveyItem.OMBFrequencyOfReporting">
+              </div>
+              <!-- <div style="width: 270px">
+                <label>Centurion Open:</label>
+                <br />
+                <input pInputText [(ngModel)]="surveyItem.CenturionOpen" [readonly]="true" class="" style=""
+                  [value]="(surveyItem.CenturionOpen) ? surveyItem.CenturionOpen : ''">
+              </div>
+              <div style="width: 270px">
+                <label>Centurion Closed:</label>
+                <br />
+                <input pInputText [(ngModel)]="surveyItem.CenturionClosed" [readonly]="true" class="" style=""
+                  [value]="(surveyItem.CenturionClosed) ? surveyItem.CenturionClosed : ''">
+              </div> -->
+            </div>
+            <!--{{ surveyItem.OMBFrequencyOfReporting }}-->
+          </div>
+          <p-table *ngIf="collectionData.d" #dt [value]="collectionData.d.results" [columns]="cols">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                  {{col.header}}
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+              <tr [pSelectableRow]="rowData">
+                <td *ngFor="let col of columns">
+                  {{rowData[col.field]}}
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+              <tr>
+                <td [attr.colspan]="columns.length" style="text-align:center;">
+                  No records found
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-panel>
+        <p-panel header="Web Links" [collapsed]='true' [toggleable]="true"
+          [style]="{'margin-bottom':'20px', 'box-shadow':'rgb(51, 51, 51) 3px 4px 16px -3px'}">
+          <div class="sectionContainer">
+            <div class="webLinks">
+              <div>
+                <div id="surveyWebsiteLink" (click)='openWebLink(surveyItem.LinkSurveyWebsite)'
+                  class="webLinksbutton btn" style="background-color: #d9534f;">Survey
+                  Website</div>
+              </div>
+              <div style=" margin-left:20px; color: #000;">
+                <div class="surveyWebsiteDesc">{{ (surveyItem.LinkSurveyWebsiteDesc) ? surveyItem.LinkSurveyWebsiteDesc
+                  :
+                  '' }}</div>
+              </div>
+            </div>
+            <div class="webLinks" style="display:none;">
+              <div>
+                <div id="surveyRespondentLink" class="webLinksbutton btn" style="background-color: #f0ad4e;">
+                  Respondent
+                  Information</div>
+              </div>
+              <div style=" margin-left:20px; color: #000;">
+                <div class="surveyRespondentDesc"></div>
+              </div>
+            </div>
+            <div class="webLinks">
+              <div>
+                <div id="surveyFormsLink" (click)='openWebLink(surveyItem.LinkForms)' class="webLinksbutton btn"
+                  style="background-color: #5bc0de;">Forms</div>
+              </div>
+              <div style=" margin-left:20px; color: #000;">
+                <div class="surveyFormsDesc">{{ (surveyItem.LinkFormsDesc) ? surveyItem.LinkFormsDesc : '' }}</div>
+              </div>
+            </div>
+            <div class="webLinks">
+
+              <div>
+                <div id="surveyDataLink" (click)='openWebLink(surveyItem.LinkSurveyData)' class="webLinksbutton btn"
+                  style="background-color: #4E5D6C;">Survey Data</div>
+              </div>
+
+              <div style=" margin-left:20px; color: #000;">
+                <div class="surveyDataDesc">{{ (surveyItem.LinkSurveyDataDesc) ? surveyItem.LinkSurveyDataDesc : '' }}
+                </div>
+              </div>
+
+            </div>
+            <div class="webLinks">
+              <div>
+                <div id="surveyVisualizationLink" (click)='openWebLink(surveyItem.LinkVisualization)'
+                  class="webLinksbutton btn" style="background-color: #5cb85c;">Visualizations</div>
+              </div>
+              <div style=" margin-left:20px; color: #000;">
+                <div class="surveyVisualizationDesc">{{ (surveyItem.LinkVisualizationDesc) ?
+                  surveyItem.LinkVisualizationDesc : '' }}</div>
+              </div>
+            </div>
+            <div class="webLinks">
+              <div>
+                <div id="surveyFlyersLink" (click)='openWebLink(surveyItem.LinkFlyers)' class="webLinksbutton btn"
+                  style="background-color: #d9534f;">Flyers</div>
+              </div>
+              <div style=" margin-left:20px; color: #000;">
+                <div class="surveyFlyersDesc webLinksDesc">{{ (surveyItem.LinkFlyersDesc) ? surveyItem.LinkFlyersDesc :
+                  ''
+                  }}</div>
+              </div>
+            </div>
+            <div class="webLinks">
+              <div>
+                <div id="surveyTipsLink" (click)='openWebLink(surveyItem.LinkTips)' class="webLinksbutton btn"
+                  style="background-color: #f0ad4e;">Tips</div>
+              </div>
+              <div style=" margin-left:20px; color: #000;">
+                <div class="surveyTipsDesc">{{ (surveyItem.LinkTipsDesc) ? surveyItem.LinkTipsDesc : '' }}</div>
+              </div>
+            </div>
+            <!-- <div class="webLinks">
+              <div>
+                <div class="webLinksbutton btn" style="background-color: #5bc0de;">RA Notes</div>
+              </div>
+              <div style=" margin-left:20px; color: #000;">
+              </div>
+            </div> -->
+            <div class="webLinks">
+              <div>
+                <div (click)="openWebLink(surveyItem.LinkRespondent)" class="webLinksbutton btn"
+                  style="background-color: #5cb85c;">Respondent Info</div>
+              </div>
+              <div style=" margin-left:20px; color: #000;">
+                <div class="surveyTipsDesc">{{ (surveyItem.LinkRespondentDesc) ? surveyItem.LinkRespondentDesc : '' }}
+                </div>
+              </div>
+            </div>
+            <div class="webLinks">
+              <div>
+                <div id="surveyCollectionLink" (click)='openWebLink(surveyItem.LinkCollectionStrategy)'
+                  class="webLinksbutton btn" style="background-color: #DF691A;">Collection Strategy</div>
+              </div>
+              <div style=" margin-left:20px; color: #000;">
+                <div class="surveyCollectionDesc">{{ (surveyItem.LinkCollectionStrategyDesc) ?
+                  surveyItem.LinkCollectionStrategyDesc : '' }}</div>
+              </div>
+            </div>
+          </div>
+        </p-panel>
+      </div>
+
+    </p-tabPanel>
+    <p-tabPanel header="Misc" [leftIcon]="mainCheck">
+      <div class="itemContainer">
+        <p-panel header="Section A" [collapsed]='true' [toggleable]="true"
+          [style]="{'margin-bottom':'20px', 'box-shadow':'rgb(51, 51, 51) 3px 4px 16px -3px'}">
+          <div class="sectionContainer" style="height: 350px;">
+            <div style="float: left; width: 50%; height: auto;">
+              <div class="">
+                <div><label style="min-width: 90%;">Survey Indicator:</label></div>
+                <div>
+
+
+                  <p-dropdown [readonly]="mainEdit" optionLabel="label"
+                    (onChange)="updatedMessageDropDown('MAIN_x002d_Indicator', surveyItem.MAINIndicator, 'Survey Indicator','dd')"
+                    (onFocus)="storeCurrentVal(surveyItem.MAINIndicator)" [options]="yesNo"
+                    [(ngModel)]="surveyItem.MAINIndicator" [style]="{'width':'20%'}"
+                    [placeholder]="surveyItem.MAINIndicator"></p-dropdown>
+
+                  <!-- <input pInputText [(ngModel)]="surveyItem.MAINIndicator"
+                    (keydown.enter)="updatedMessage('', surveyItem.MAINIndicator, 'Survey Indicator')"
+                    (blur)="updatedMessage('', surveyItem.MAINIndicator, 'Survey Indicator')"
+                    (focus)="storeCurrentVal(surveyItem.MAINIndicator)" [readonly]="mainEdit" class=""
+                    style="width:90%;" [value]="(surveyItem.MAINIndicator) ? surveyItem.MAINIndicator : ''"> -->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Reimbursable:</label></div>
+                <div>
+
+                  <p-dropdown [readonly]="mainEdit" optionLabel="label"
+                    (onChange)="updatedMessageDropDown('MAIN_x002d_Reimbursable', surveyItem.MAINReimbursable, 'Reimbursable')"
+                    (focus)="storeCurrentVal(surveyItem.MAINReimbursable)" [options]="yesNo"
+                    [(ngModel)]="surveyItem.MAINReimbursable" [style]="{'width':'20%'}"
+                    [placeholder]="surveyItem.MAINReimbursable"></p-dropdown>
+
+                  <!--<input pInputText [(ngModel)]="surveyItem.MAINReimbursable"
+                    (keydown.enter)="updatedMessage('', surveyItem.MAINReimbursable, 'Reimbursable')"
+                    (blur)="updatedMessage('', surveyItem.MAINReimbursable, 'Reimbursable')"
+                    (focus)="storeCurrentVal(surveyItem.MAINReimbursable)" [readonly]="mainEdit" class=""
+                    style="width:90%;" [value]="(surveyItem.MAINReimbursable) ? surveyItem.MAINReimbursable : ''">-->
+                </div>
+              </div>
+              <div class="" *ngIf="surveyItem.MAINReimbursable.value == 'Yes' || surveyItem.MAINReimbursable == 'Yes'">
+                <div><label style="min-width: 90%;">Sponsor:</label></div>
+                <div><input pInputText [(ngModel)]="surveyItem.MAINSponsor" [disabled]="surveyItem.MAINReimbursable == 'No'"
+                    (keydown.enter)="updatedMessage('MAIN_x002d_Sponsor', surveyItem.MAINSponsor, 'Sponsor')"
+                    (blur)="updatedMessage('MAIN_x002d_Sponsor', surveyItem.MAINSponsor, 'Sponsor')"
+                    (focus)="storeCurrentVal(surveyItem.MAINSponsor)" [readonly]="mainEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.MAINSponsor) ? surveyItem.MAINSponsor : ''"></div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Is this a sample survey?</label></div>
+                <div>
+
+                  <p-dropdown [readonly]="mainEdit" optionLabel="label"
+                    (onChange)="updatedMessageDropDown('MAIN_x002d_SampleTaken', surveyItem.MAINSampleTaken, 'Is this a sample survey?')"
+                    (focus)="storeCurrentVal(surveyItem.MAINSampleTaken)" [options]="yesNo"
+                    [(ngModel)]="surveyItem.MAINSampleTaken" [style]="{'width':'20%'}"
+                    [placeholder]="surveyItem.MAINSampleTaken"></p-dropdown>
+
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">When was the last sample taken?</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.MAINSampleYear" [disabled]="surveyItem.MAINSampleTaken == 'No'"
+                    (keydown.enter)="updatedMessage('MAIN_x002d_SampleYear', surveyItem.MAINSampleYear, 'When was the last sample taken?')"
+                    (blur)="updatedMessage('MAIN_x002d_SampleYear', surveyItem.MAINSampleYear, 'When was the last sample taken?')"
+                    (focus)="storeCurrentVal(surveyItem.MAINSampleYear)" [readonly]="mainEdit" class=""
+                    style="width:90%;" [value]="(surveyItem.MAINSampleYear) ? surveyItem.MAINSampleYear : ''">
+                </div>
+              </div>
+            </div>
+            <div style="float: right; width: 50%; height: auto;">
+              <div class="">
+                <div><label style="min-width: 90%;">Data Collection Mode: <i>(Centurion, Fax, Email, eCorr)</i></label>
+                </div>
+
+                <div><input pInputText [(ngModel)]="surveyItem.MAINDataCollectionMode"
+                    (keydown.enter)="updatedMessage('MAIN_x002d_DataCollectionMode', surveyItem.MAINDataCollectionMode, 'Data Collection Mode')"
+                    (blur)="updatedMessage('MAIN_x002d_DataCollectionMode', surveyItem.MAINDataCollectionMode, 'Data Collection Mode')"
+                    (focus)="storeCurrentVal(surveyItem.MAINDataCollectionMode)" [readonly]="mainEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.MAINDataCollectionMode) ? surveyItem.MAINDataCollectionMode : ''">
+                </div>
+
+              </div>
+              
+              <div class="">
+                <div><label style="min-width: 90%;">Confidentiality:</label></div>
+                <div>
+                  <textarea pInputTextarea [(ngModel)]="surveyItem.MAINConfidentiality" [readonly]="mainEdit"
+                    style="width:95%; height:120px;" id=""
+                    [value]="(surveyItem.MAINConfidentiality) ? surveyItem.MAINConfidentiality : ''"
+                    (focus)="storeCurrentVal(surveyItem.MAINConfidentiality)"
+                    (blur)="updatedMessage('MAIN_x002d_Confidentiality', surveyItem.MAINConfidentiality, 'Confidentiality')"></textarea>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-panel>
+        <p-panel header="Section B" [collapsed]='true' [toggleable]="true"
+          [style]="{'margin-bottom':'20px', 'box-shadow':'rgb(51, 51, 51) 3px 4px 16px -3px'}">
+          <div class="sectionContainer" style="height: 410px;">
+            <div style="float: left; width: 50%; height: auto;">
+
+              <div class="">
+                <div><label style="min-width: 90%;">Survey Contact:</label></div>
+                <div><input pInputText [(ngModel)]="surveyItem.MAINSurveyContact"
+                    (keydown.enter)="updatedMessage('MAIN_x002d_SurveyContact', surveyItem.MAINSurveyContact, 'Survey Contact')"
+                    (blur)="updatedMessage('MAIN_x002d_SurveyContact', surveyItem.MAINSurveyContact, 'Survey Contact')"
+                    (focus)="storeCurrentVal(surveyItem.MAINSurveyContact)" [readonly]="mainEdit" class=""
+                    style="width:90%;" [value]="(surveyItem.MAINSurveyContact) ? surveyItem.MAINSurveyContact : ''">
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Survey Email:</label></div>
+                <div><input pInputText [(ngModel)]="surveyItem.MAINSurveyEmail"
+                    (keydown.enter)="updatedMessage('MAIN_x002d_SurveyEmail', surveyItem.MAINSurveyEmail, 'Survey Email')"
+                    (blur)="updatedMessage('MAIN_x002d_SurveyEmail', surveyItem.MAINSurveyEmail, 'Survey Email')"
+                    (focus)="storeCurrentVal(surveyItem.MAINSurveyEmail)" [readonly]="mainEdit" class=""
+                    style="width:90%;" [value]="(surveyItem.MAINSurveyEmail) ? surveyItem.MAINSurveyEmail : ''"></div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Survey Phone Number:</label></div>
+                <div>
+                  <!--<input pInputText [(ngModel)]="surveyItem.MAINSurveyPhoneNumber"
+                    (keydown.enter)="updatedMessage('MAIN_x002d_SurveyPhoneNumber', surveyItem.MAINSurveyPhoneNumber, 'Survey Phone Number')"
+                    (blur)="updatedMessage('MAIN_x002d_SurveyPhoneNumber', surveyItem.MAINSurveyPhoneNumber, 'Survey Number')"
+                    (focus)="storeCurrentVal(surveyItem.MAINSurveyPhoneNumber)" [readonly]="mainEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.MAINSurveyPhoneNumber) ? surveyItem.MAINSurveyPhoneNumber : ''">-->
+
+                  <p-inputMask [(ngModel)]="surveyItem.MAINSurveyPhoneNumber"
+                    (keydown.enter)="updatedMessage('MAIN_x002d_SurveyPhoneNumber', surveyItem.MAINSurveyPhoneNumber, 'Survey Number')"
+                    mask="(999) 999-9999" (onFocus)="storeCurrentVal(surveyItem.MAINSurveyPhoneNumber)"
+                    [readonly]="mainEdit" class=""
+                    (onBlur)="updatedMessage('MAIN_x002d_SurveyPhoneNumber', surveyItem.MAINSurveyPhoneNumber, 'Survey Number')"
+                    placeholder="(999) 999-9999">{{ surveyItem.MAINSurveyPhoneNumber }}</p-inputMask>
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Bureau Contact:</label></div>
+                <div><input pInputText [(ngModel)]="surveyItem.MAINBureauContact"
+                    (keydown.enter)="updatedMessage('MAIN_x002d_BureauContact', surveyItem.MAINBureauContact, 'Bureau Contact')"
+                    (blur)="updatedMessage('MAIN_x002d_BureauContact', surveyItem.MAINBureauContact, 'Bureau Contact')"
+                    (focus)="storeCurrentVal(surveyItem.MAINBureauContact)" [readonly]="mainEdit" class=""
+                    style="width:90%;" [value]="(surveyItem.MAINBureauContact) ? surveyItem.MAINBureauContact : ''">
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Bureau Contact Email:</label></div>
+                <div><input pInputText [(ngModel)]="surveyItem.MAINBureauContactEmail"
+                    (keydown.enter)="updatedMessage('MAIN_x002d_BureauContactEmail', surveyItem.MAINBureauContactEmail, 'Bureau Contact Email')"
+                    (blur)="updatedMessage('MAIN_x002d_BureauContactEmail', surveyItem.MAINBureauContactEmail, 'Bureau Contact Email')"
+                    (focus)="storeCurrentVal(surveyItem.MAINBureauContactEmail)" [readonly]="mainEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.MAINBureauContactEmail) ? surveyItem.MAINBureauContactEmail : ''"></div>
+              </div>
+            </div>
+            <div style="float: right; width: 50%; height: auto;">
+              <div class="">
+                <div><label style="min-width: 90%;">Bureau Contact Number:</label></div>
+                <div>
+                  <!--<input pInputText [(ngModel)]="surveyItem.MAINBureauContactNumber"
+                    (keydown.enter)="updatedMessage('MAIN_x002d_BureauContactNumber', surveyItem.MAINBureauContactNumber, 'Bureau Contact Number')"
+                    (blur)="updatedMessage('MAIN_x002d_BureauContactNumber', surveyItem.MAINBureauContactNumber, 'Bureau Contact Number')"
+                    (focus)="storeCurrentVal(surveyItem.MAINBureauContactNumber)" [readonly]="mainEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.MAINBureauContactNumber) ? surveyItem.MAINBureauContactNumber : ''">-->
+
+                  <p-inputMask [(ngModel)]="surveyItem.MAINBureauContactNumber"
+                    (keydown.enter)="updatedMessage('MAIN_x002d_BureauContactNumber', surveyItem.MAINBureauContactNumber, 'Bureau Contact Number')"
+                    mask="(999) 999-9999" (onFocus)="storeCurrentVal(surveyItem.MAINBureauContactNumber)"
+                    [readonly]="mainEdit" class=""
+                    (onBlur)="updatedMessage('MAIN_x002d_BureauContactNumber', surveyItem.MAINBureauContactNumber, 'Bureau Contact Number')"
+                    placeholder="(999) 999-9999">{{ surveyItem.MAINBureauContactNumber }}</p-inputMask>
+                </div>
+              </div>
+              <!-- <div class="">
+                <div><label style="min-width: 90%;">Centurion Open Date:</label></div>
+                <div>
+
+                  <p-inputMask [(ngModel)]="surveyItem.CenturionOpen"
+                    (keydown.enter)="updatedMessage('CenturionOpen', surveyItem.CenturionOpen, 'Centurion Open Date')"
+                    mask="99/99/9999" (onFocus)="storeCurrentVal(surveyItem.CenturionOpen)" [readonly]="mainEdit"
+                    class="" (onBlur)="updatedMessage('CenturionOpen', surveyItem.CenturionOpen, 'Centurion Open Date')"
+                    slotChar="mm/dd/yyyy" placeholder="mm/dd/yyyy">{{ surveyItem.CenturionOpen }}</p-inputMask>
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Centurion Closed Date:</label></div>
+                <div>
+                  <p-inputMask [(ngModel)]="surveyItem.CenturionClosed"
+                    (keydown.enter)="updatedMessage('CenturionClosed', surveyItem.CenturionOpen, 'Centurion Closed Date')"
+                    mask="99/99/9999" (onFocus)="storeCurrentVal(surveyItem.CenturionClosed)" [readonly]="mainEdit"
+                    class=""
+                    (onBlur)="updatedMessage('CenturionClosed', surveyItem.CenturionClosed, 'Centurion Closed Date')"
+                    slotChar="mm/dd/yyyy" placeholder="mm/dd/yyyy">{{ surveyItem.CenturionClosed }}</p-inputMask>
+                </div>
+              </div> -->
+              <div class="">
+                <div><label style="min-width: 90%;">NPC/HQ Phone Number:</label></div>
+                <div>
+                  <!--<input pInputText [(ngModel)]="surveyItem.MAINNPCPhoneNumber"
+                    (keydown.enter)="updatedMessage('MAIN_x002d_NPCPhoneNumber', surveyItem.MAINNPCPhoneNumber, 'NPC Phone Number')"
+                    (blur)="updatedMessage('MAIN_x002d_NPCPhoneNumber', surveyItem.MAINNPCPhoneNumber, 'NPC Phone Number')"
+                    (focus)="storeCurrentVal(surveyItem.MAINNPCPhoneNumber)" [readonly]="mainEdit" class=""
+                    style="width:90%;" [value]="(surveyItem.MAINNPCPhoneNumber) ? surveyItem.MAINNPCPhoneNumber : ''">-->
+
+                  <p-inputMask [(ngModel)]="surveyItem.MAINNPCPhoneNumber"
+                    (keydown.enter)="updatedMessage('MAIN_x002d_NPCPhoneNumber', surveyItem.MAINNPCPhoneNumber, 'NPC/HQ Phone Number')"
+                    mask="(999) 999-9999" (onFocus)="storeCurrentVal(surveyItem.MAINNPCPhoneNumber)"
+                    [readonly]="mainEdit" class=""
+                    (onBlur)="updatedMessage('MAIN_x002d_NPCPhoneNumber', surveyItem.MAINNPCPhoneNumber, 'NPC/HQ Phone Number')"
+                    placeholder="(999) 999-9999">{{ surveyItem.MAINNPCPhoneNumber }}</p-inputMask>
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">NPC/HQ Hours of Operations:</label></div>
+                <div><input pInputText [(ngModel)]="surveyItem.MAINNPCHours"
+                    (keydown.enter)="updatedMessage('MAIN_x002d_NPCHours', surveyItem.MAINNPCHours, 'NPC/HQ Hours of Operations')"
+                    (blur)="updatedMessage('MAIN_x002d_NPCHours', surveyItem.MAINNPCHours, 'NPC/HQ Hours of Operations')"
+                    (focus)="storeCurrentVal(surveyItem.MAINNPCHours)" [readonly]="mainEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.MAINNPCHours) ? surveyItem.MAINNPCHours : ''">
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-panel>
+        <p-panel header="Section C" [collapsed]='true' [toggleable]="true"
+          [style]="{'margin-bottom':'20px', 'box-shadow':'rgb(51, 51, 51) 3px 4px 16px -3px'}">
+          <div class="sectionContainer" style="height: 155px;">
+            <div style="float: left; width: 100%; height: auto;">
+              <div class="">
+                <div><label style="min-width: 90%;">Tips:</label></div>
+                <div>
+                  <textarea pInputTextarea [(ngModel)]="surveyItem.MAINTIPS" [readonly]="mainEdit"
+                    style="width:100%; height:120px;" id="" [value]="(surveyItem.MAINTIPS) ? surveyItem.MAINTIPS : ''"
+                    (focus)="storeCurrentVal(surveyItem.MAINTIPS)"
+                    (blur)="updatedMessage('MAIN_x002d_TIPS', surveyItem.MAINTIPS, 'Tips')"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-panel>
+        <p-panel header="Section D" [collapsed]='true' [toggleable]="true"
+        [style]="{'margin-bottom':'20px', 'box-shadow':'rgb(51, 51, 51) 3px 4px 16px -3px'}">
+        <div class="sectionContainer" style="height: 1270px;">
+          <div style="float: left; width: 100%; height: auto;">
+
+            <div class="">
+              <div><label style="min-width: 90%;">Survey Website:</label></div>
+              <div><input pInputText [(ngModel)]="surveyItem.LinkSurveyWebsite"
+                  (keydown.enter)="updatedMessage('Link_x002d_SurveyWebsite', surveyItem.LinkSurveyWebsite, 'Survey Website')"
+                  (blur)="updatedMessage('Link_x002d_SurveyWebsite', surveyItem.LinkSurveyWebsite, 'Survey Website')"
+                  (focus)="storeCurrentVal(surveyItem.LinkSurveyWebsite)" [readonly]="mainEdit" class=""
+                  style="width:100%;" [value]="(surveyItem.LinkSurveyWebsite) ? surveyItem.LinkSurveyWebsite : ''">
+              </div>
+            </div>                        
+            <div class="">
+              <div><label style="min-width: 90%;">Survey Website Description:</label></div>
+              <div>
+                <textarea pInputTextarea [(ngModel)]="surveyItem.LinkSurveyWebsiteDesc" [readonly]="mainEdit"
+                  style="width:100%; height:60px;" id="" [value]="(surveyItem.LinkSurveyWebsiteDesc) ? surveyItem.LinkSurveyWebsiteDesc : ''"
+                  (focus)="storeCurrentVal(surveyItem.LinkSurveyWebsiteDesc)"
+                  (blur)="updatedMessage('Link_x002d_SurveyWebsite_x002d_D', surveyItem.LinkSurveyWebsiteDesc, 'Survey Website Description')"></textarea>
+              </div>
+            </div>
+
+            <div class="">
+              <div><label style="min-width: 90%;">Forms:</label></div>
+              <div><input pInputText [(ngModel)]="surveyItem.LinkForms"
+                  (keydown.enter)="updatedMessage('Link_x002d_Forms', surveyItem.LinkForms, 'Forms')"
+                  (blur)="updatedMessage('Link_x002d_Forms', surveyItem.LinkForms, 'Forms')"
+                  (focus)="storeCurrentVal(surveyItem.LinkForms)" [readonly]="mainEdit" class=""
+                  style="width:100%;" [value]="(surveyItem.LinkForms) ? surveyItem.LinkForms : ''">
+              </div>
+            </div>                        
+            <div class="">
+              <div><label style="min-width: 90%;">Forms Description:</label></div>
+              <div>
+                <textarea pInputTextarea [(ngModel)]="surveyItem.LinkFormsDesc" [readonly]="mainEdit"
+                  style="width:100%; height:60px;" id="" [value]="(surveyItem.LinkFormsDesc) ? surveyItem.LinkFormsDesc : ''"
+                  (focus)="storeCurrentVal(surveyItem.LinkFormsDesc)"
+                  (blur)="updatedMessage('Link_x002d_Forms_x002d_Desc', surveyItem.LinkFormsDesc, 'Forms Description')"></textarea>
+              </div>
+            </div>
+            
+            <div class="">
+              <div><label style="min-width: 90%;">Survey Data:</label></div>
+              <div><input pInputText [(ngModel)]="surveyItem.LinkSurveyData"
+                  (keydown.enter)="updatedMessage('Link_x002d_SurveyData', surveyItem.LinkSurveyData, 'Survey Data')"
+                  (blur)="updatedMessage('Link_x002d_SurveyData', surveyItem.LinkSurveyData, 'Survey Data')"
+                  (focus)="storeCurrentVal(surveyItem.LinkSurveyData)" [readonly]="mainEdit" class=""
+                  style="width:100%;" [value]="(surveyItem.LinkSurveyData) ? surveyItem.LinkSurveyData : ''">
+              </div>
+            </div>                        
+            <div class="">
+              <div><label style="min-width: 90%;">Survey Data Description:</label></div>
+              <div>
+                <textarea pInputTextarea [(ngModel)]="surveyItem.LinkSurveyDataDesc" [readonly]="mainEdit"
+                  style="width:100%; height:60px;" id="" [value]="(surveyItem.LinkSurveyDataDesc) ? surveyItem.LinkSurveyDataDesc : ''"
+                  (focus)="storeCurrentVal(surveyItem.LinkSurveyDataDesc)"
+                  (blur)="updatedMessage('Link_x002d_SurveyData_x002d_Desc', surveyItem.LinkSurveyDataDesc, 'Survey Data Description')"></textarea>
+              </div>
+            </div> 
+
+            <div class="">
+              <div><label style="min-width: 90%;">Collection Strategy:</label></div>
+              <div><input pInputText [(ngModel)]="surveyItem.LinkCollectionStrategy"
+                  (keydown.enter)="updatedMessage('Link_x002d_CollectionStrategy', surveyItem.LinkCollectionStrategy, 'Collection Strategy')"
+                  (blur)="updatedMessage('Link_x002d_CollectionStrategy', surveyItem.LinkCollectionStrategy, 'Collection Strategy')"
+                  (focus)="storeCurrentVal(surveyItem.LinkCollectionStrategy)" [readonly]="mainEdit" class=""
+                  style="width:100%;" [value]="(surveyItem.LinkCollectionStrategy) ? surveyItem.LinkCollectionStrategy : ''">
+              </div>
+            </div>                        
+            <div class="">
+              <div><label style="min-width: 90%;">Collection Strategy Description:</label></div>
+              <div>
+                <textarea pInputTextarea [(ngModel)]="surveyItem.LinkCollectionStrategyDesc" [readonly]="mainEdit"
+                  style="width:100%; height:60px;" id="" [value]="(surveyItem.LinkCollectionStrategyDesc) ? surveyItem.LinkCollectionStrategyDesc : ''"
+                  (focus)="storeCurrentVal(surveyItem.LinkCollectionStrategyDesc)"
+                  (blur)="updatedMessage('Link_x002d_CollectionStrategy_x0', surveyItem.LinkCollectionStrategyDesc, 'Collection Strategy Description')"></textarea>
+              </div>
+            </div>
+
+            <div class="">
+              <div><label style="min-width: 90%;">Visualizations:</label></div>
+              <div><input pInputText [(ngModel)]="surveyItem.LinkVisualization"
+                  (keydown.enter)="updatedMessage('Link_x002d_Visualization', surveyItem.LinkVisualization, 'Visualizations')"
+                  (blur)="updatedMessage('Link_x002d_Visualization', surveyItem.LinkVisualization, 'Visualizations')"
+                  (focus)="storeCurrentVal(surveyItem.LinkVisualization)" [readonly]="mainEdit" class=""
+                  style="width:100%;" [value]="(surveyItem.LinkVisualization) ? surveyItem.LinkVisualization : ''">
+              </div>
+            </div>                        
+            <div class="">
+              <div><label style="min-width: 90%;">Visualizations Description:</label></div>
+              <div>
+                <textarea pInputTextarea [(ngModel)]="surveyItem.LinkVisualizationDesc" [readonly]="mainEdit"
+                  style="width:100%; height:60px;" id="" [value]="(surveyItem.LinkVisualizationDesc) ? surveyItem.LinkVisualizationDesc : ''"
+                  (focus)="storeCurrentVal(surveyItem.LinkVisualizationDesc)"
+                  (blur)="updatedMessage('Link_x002d_Visualization_x002d_D', surveyItem.LinkVisualizationDesc, 'Visualizations Description')"></textarea>
+              </div>
+            </div>
+            
+            <div class="">
+              <div><label style="min-width: 90%;">Flyers:</label></div>
+              <div><input pInputText [(ngModel)]="surveyItem.LinkFlyers"
+                  (keydown.enter)="updatedMessage('Link_x002d_Flyers', surveyItem.LinkFlyers, 'Flyers')"
+                  (blur)="updatedMessage('Link_x002d_Flyers', surveyItem.LinkFlyers, 'Flyers')"
+                  (focus)="storeCurrentVal(surveyItem.LinkFlyers)" [readonly]="mainEdit" class=""
+                  style="width:100%;" [value]="(surveyItem.LinkFlyers) ? surveyItem.LinkFlyers : ''">
+              </div>
+            </div>                        
+            <div class="">
+              <div><label style="min-width: 90%;">Flyers Description:</label></div>
+              <div>
+                <textarea pInputTextarea [(ngModel)]="surveyItem.LinkFlyersDesc" [readonly]="mainEdit"
+                  style="width:100%; height:60px;" id="" [value]="(surveyItem.LinkFlyersDesc) ? surveyItem.LinkFlyersDesc : ''"
+                  (focus)="storeCurrentVal(surveyItem.LinkFlyersDesc)"
+                  (blur)="updatedMessage('Link_x002d_Flyers_x002d_Desc', surveyItem.LinkFlyersDesc, 'Flyers Description')"></textarea>
+              </div>
+            </div> 
+            <div class="">
+              <div><label style="min-width: 90%;">Tips:</label></div>
+              <div><input pInputText [(ngModel)]="surveyItem.LinkTips"
+                  (keydown.enter)="updatedMessage('Link_x002d_Tips', surveyItem.LinkTips, 'Tips')"
+                  (blur)="updatedMessage('Link_x002d_Tips', surveyItem.LinkTips, 'Tips')"
+                  (focus)="storeCurrentVal(surveyItem.LinkTips)" [readonly]="mainEdit" class=""
+                  style="width:100%;" [value]="(surveyItem.LinkTips) ? surveyItem.LinkTips : ''">
+              </div>
+            </div>                        
+            <div class="">
+              <div><label style="min-width: 90%;">Tips Description:</label></div>
+              <div>
+                <textarea pInputTextarea [(ngModel)]="surveyItem.LinkTipsDesc" [readonly]="mainEdit"
+                  style="width:100%; height:60px;" id="" [value]="(surveyItem.LinkTipsDesc) ? surveyItem.LinkTipsDesc : ''"
+                  (focus)="storeCurrentVal(surveyItem.LinkTipsDesc)"
+                  (blur)="updatedMessage('Link_x002d_Tips_x002d_Desc', surveyItem.LinkTipsDesc, 'Tips')"></textarea>
+              </div>
+            </div>
+                       
+            <div class="">
+              <div><label style="min-width: 90%;">Respondent Info:</label></div>
+              <div><input pInputText [(ngModel)]="surveyItem.LinkRespondent"
+                  (keydown.enter)="updatedMessage('Link_x002d_Respondent', surveyItem.LinkRespondent, 'Respondent Info')"
+                  (blur)="updatedMessage('Link_x002d_Respondent', surveyItem.LinkRespondent, 'Respondent Info')"
+                  (focus)="storeCurrentVal(surveyItem.LinkRespondent)" [readonly]="mainEdit" class=""
+                  style="width:100%;" [value]="(surveyItem.LinkRespondent) ? surveyItem.LinkRespondent : ''">
+              </div>
+            </div>                        
+            <div class="">
+              <div><label style="min-width: 90%;">Respondent Info Description:</label></div>
+              <div>
+                <textarea pInputTextarea [(ngModel)]="surveyItem.LinkRespondentDesc" [readonly]="mainEdit"
+                  style="width:100%; height:60px;" id="" [value]="(surveyItem.LinkRespondentDesc) ? surveyItem.LinkRespondentDesc : ''"
+                  (focus)="storeCurrentVal(surveyItem.LinkRespondentDesc)"
+                  (blur)="updatedMessage('Link_x002d_Respondent_x002d_Desc', surveyItem.LinkRespondentDesc, 'Respondent Info')"></textarea>
+              </div>
+            </div>                       
+          </div>
+        </div>
+      </p-panel>
+      </div>
+    </p-tabPanel>
+
+    <p-tabPanel header="HUB" [leftIcon]="hubCheck" rightIcon="">
+      <div class="itemContainer">
+        <p-panel header="Section A" [collapsed]='true' [toggleable]="true"
+          [style]="{'margin-bottom':'20px', 'box-shadow':'rgb(51, 51, 51) 3px 4px 16px -3px'}">
+          <div class="sectionContainer" style="height: 390px;">
+            <div style="float: left; width: 50%; height: auto;">
+              <div class="">
+                <div><label style="min-width: 90%;">Mission Critical:</label></div>
+                <div>
+
+                  <p-dropdown [readonly]="hubEdit" optionLabel="label"
+                    (onChange)="updatedMessageDropDown('HUB_x002d_MissionCritical', surveyItem.HUBMissionCritical, 'Mission Critical')"
+                    (focus)="storeCurrentVal(surveyItem.HUBMissionCritical)" [options]="yesNo"
+                    [(ngModel)]="surveyItem.HUBMissionCritical" [style]="{'width':'20%'}"
+                    [placeholder]="surveyItem.HUBMissionCritical"></p-dropdown>
+
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Sample Size:</label></div>
+                <div>
+
+                  <input pInputText [(ngModel)]="surveyItem.HUBSampleSize"
+                    (keydown.enter)="updatedMessage('HUB_x002d_SampleSize', surveyItem.HUBSampleSize, 'Sample Size')"
+                    (blur)="updatedMessage('HUB_x002d_SampleSize', surveyItem.HUBSampleSize, 'Sample Size')"
+                    (focus)="storeCurrentVal(surveyItem.HUBSampleSize)" [readonly]="hubEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.HUBSampleSize) ? surveyItem.HUBSampleSize : ''">
+
+
+                  <!--<input pInputText [readonly]="hubEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.HUBSampleSize) ? surveyItem.HUBSampleSize : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Target Population:</label></div>
+                <div>
+
+                  <input pInputText [(ngModel)]="surveyItem.HUBTargetPopulation"
+                    (keydown.enter)="updatedMessage('HUB_x002d_TargetPopulation', surveyItem.HUBTargetPopulation, 'Target Population')"
+                    (blur)="updatedMessage('HUB_x002d_TargetPopulation', surveyItem.HUBTargetPopulation, 'Target Population')"
+                    (focus)="storeCurrentVal(surveyItem.HUBTargetPopulation)" [readonly]="hubEdit" class=""
+                    style="width:90%;" [value]="(surveyItem.HUBTargetPopulation) ? surveyItem.HUBTargetPopulation : ''">
+
+                  <!--<input pInputText [readonly]="hubEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.HUBTargetPopulation) ? surveyItem.HUBTargetPopulation : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Frame Population Size:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.HUBFramePopulationSize"
+                    (keydown.enter)="updatedMessage('HUB_x002d_FramePopulationSize', surveyItem.HUBFramePopulationSize, 'Frame Population Size')"
+                    (blur)="updatedMessage('HUB_x002d_FramePopulationSize', surveyItem.HUBFramePopulationSize, 'Frame Population Size')"
+                    (focus)="storeCurrentVal(surveyItem.HUBFramePopulationSize)" [readonly]="hubEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.HUBFramePopulationSize) ? surveyItem.HUBFramePopulationSize : ''">
+
+                  <!--<input pInputText [readonly]="hubEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.HUBFramePopulationSize) ? surveyItem.HUBFramePopulationSize : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Coverage:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.HUBCoverage"
+                    (keydown.enter)="updatedMessage('HUB_x002d_Coverage', surveyItem.HUBCoverage, 'Coverage')"
+                    (blur)="updatedMessage('HUB_x002d_Coverage', surveyItem.HUBCoverage, 'Coverage')"
+                    (focus)="storeCurrentVal(surveyItem.HUBCoverage)" [readonly]="hubEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.HUBCoverage) ? surveyItem.HUBCoverage : ''">
+
+                  <!--<input pInputText [readonly]="hubEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.HUBCoverage) ? surveyItem.HUBCoverage : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Corresponding Annual:</label></div>
+                <div>
+
+                  <input pInputText [(ngModel)]="surveyItem.HUBCorrespondingAnnual"
+                    (keydown.enter)="updatedMessage('HUB_x002d_CorrespondingAnnual', surveyItem.HUBCorrespondingAnnual, 'Corresponding Annual')"
+                    (blur)="updatedMessage('HUB_x002d_CorrespondingAnnual', surveyItem.HUBCorrespondingAnnual, 'Corresponding Annual')"
+                    (focus)="storeCurrentVal(surveyItem.HUBCorrespondingAnnual)" [readonly]="hubEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.HUBCorrespondingAnnual) ? surveyItem.HUBCorrespondingAnnual : ''">
+
+                  <!--<input pInputText [readonly]="hubEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.HUBCorrespondingAnnual) ? surveyItem.HUBCorrespondingAnnual : ''">-->
+                </div>
+              </div>
+            </div>
+            <div style="float: right; width: 50%; height: auto;">
+              <div class="">
+                <div><label style="min-width: 90%;">Corresponding Census:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.HUBCorrespondingCensus"
+                    (keydown.enter)="updatedMessage('HUB_x002d_CorrespondingCensus', surveyItem.HUBCorrespondingCensus, 'Corresponding Census')"
+                    (blur)="updatedMessage('HUB_x002d_CorrespondingCensus', surveyItem.HUBCorrespondingCensus, 'Corresponding Census')"
+                    (focus)="storeCurrentVal(surveyItem.HUBCorrespondingCensus)" [readonly]="hubEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.HUBCorrespondingCensus) ? surveyItem.HUBCorrespondingCensus : ''">
+
+                  <!--<input pInputText [readonly]="hubEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.HUBCorrespondingCensus) ? surveyItem.HUBCorrespondingCensus : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Corresponding Indicator:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.HUBCorrespondingIndicator"
+                    (keydown.enter)="updatedMessage('HUB_x002d_CorrespondingIndicator', surveyItem.HUBCorrespondingIndicator, 'Corresponding Census')"
+                    (blur)="updatedMessage('HUB_x002d_CorrespondingIndicator', surveyItem.HUBCorrespondingIndicator, 'Corresponding Census')"
+                    (focus)="storeCurrentVal(surveyItem.HUBCorrespondingIndicator)" [readonly]="hubEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.HUBCorrespondingIndicator) ? surveyItem.HUBCorrespondingIndicator : ''">
+
+                  <!--<input pInputText [readonly]="hubEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.HUBCorrespondingIndicator) ? surveyItem.HUBCorrespondingIndicator : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Processing System:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.HUBProcessingSystem"
+                    (keydown.enter)="updatedMessage('HUB_x002d_ProcessingSystem', surveyItem.HUBProcessingSystem, 'Processing System')"
+                    (blur)="updatedMessage('HUB_x002d_ProcessingSystem', surveyItem.HUBProcessingSystem, 'Processing System')"
+                    (focus)="storeCurrentVal(surveyItem.HUBProcessingSystem)" [readonly]="hubEdit" class=""
+                    style="width:90%;" [value]="(surveyItem.HUBProcessingSystem) ? surveyItem.HUBProcessingSystem : ''">
+
+                  <!--<p-dropdown [readonly]="hubEdit" optionLabel="name"
+                    (onChange)="updatedMessageDropDown('HUB_x002d_ProcessingSystem', surveyItem.HUBProcessingSystem, 'Processing System')"
+                    (focus)="storeCurrentVal(surveyItem.HUBProcessingSystem)" [options]="processingSystems"
+                    [(ngModel)]="surveyItem.HUBProcessingSystem" [style]="{'width':'40%'}"
+                    [placeholder]="surveyItem.HUBProcessingSystem"></p-dropdown>
+
+                  <input pInputText [readonly]="hubEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.HUBProcessingSystem) ? surveyItem.HUBProcessingSystem : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Dissemination Mechanism:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.HUBDisseminationMechanism"
+                    (keydown.enter)="updatedMessage('HUB_x002d_DisseminationMechanism', surveyItem.HUBDisseminationMechanism, 'Dissemination Mechanism')"
+                    (blur)="updatedMessage('HUB_x002d_DisseminationMechanism', surveyItem.HUBDisseminationMechanism, 'Dissemination Mechanism')"
+                    (focus)="storeCurrentVal(surveyItem.HUBDisseminationMechanism)" [readonly]="hubEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.HUBDisseminationMechanism) ? surveyItem.HUBDisseminationMechanism : ''">
+
+                  <!-- <p-dropdown *ngIf="surveyItem" [readonly]="hubEdit" optionLabel="label"
+                    (onChange)="updatedMessageDropDown('HUB_x002d_DisseminationMechanism', surveyItem.HUBDisseminationMechanism, 'Dissemination Mechanism')"
+                    (focus)="storeCurrentVal(surveyItem.HUBDisseminationMechanism)" [options]="disseminationMechanisms"
+                    [(ngModel)]="surveyItem.HUBDisseminationMechanism"
+                    [placeholder]="surveyItem.HUBDisseminationMechanism" [style]="{'width':'40%'}"></p-dropdown>-->
+
+
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Total Quantity Response Rate (TQRR):</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.HUBTQRR2014"
+                    (keydown.enter)="updatedMessage('HUB_x002d_TQRR2014', surveyItem.HUBTQRR2014, 'Total Quantity Response Rate')"
+                    (blur)="updatedMessage('HUB_x002d_TQRR2014', surveyItem.HUBTQRR2014, 'Total Quantity Response Rate')"
+                    (focus)="storeCurrentVal(surveyItem.HUBTQRR2014)" [readonly]="hubEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.HUBTQRR2014) ? surveyItem.HUBTQRR2014 : ''">
+
+                  <!--<input pInputText [readonly]="hubEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.HUBTQRR2014) ? surveyItem.HUBTQRR2014 : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Unit Response Rate (URR):</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.HUBURR2014"
+                    (keydown.enter)="updatedMessage('HUB_x002d_URR2014', surveyItem.HUBURR2014, 'Unit Response Rate')"
+                    (blur)="updatedMessage('HUB_x002d_URR2014', surveyItem.HUBURR2014, 'Unit Response Rate')"
+                    (focus)="storeCurrentVal(surveyItem.HUBURR2014)" [readonly]="hubEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.HUBURR2014) ? surveyItem.HUBURR2014 : ''">
+
+                  <!--<input pInputText [readonly]="hubEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.HUBURR2014) ? surveyItem.HUBURR2014 : ''">-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-panel>
+        <p-panel header="Section B" [collapsed]='true' [toggleable]="true"
+          [style]="{'margin-bottom':'20px', 'box-shadow':'rgb(51, 51, 51) 3px 4px 16px -3px'}">
+          <div class="sectionContainer" style="height: 200px;">
+            <div style="float: left; width: 50%; height: auto;">
+
+              <div class="">
+                <div><label style="min-width: 90%;">Frame Sources:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.HUBFrameSources"
+                    (keydown.enter)="updatedMessage('HUB_x002d_FrameSources', surveyItem.HUBFrameSources, 'Frame Sources')"
+                    (blur)="updatedMessage('HUB_x002d_FrameSources', surveyItem.HUBFrameSources, 'Frame Sources')"
+                    (focus)="storeCurrentVal(surveyItem.HUBFrameSources)" [readonly]="hubEdit" class=""
+                    style="width:90%;" [value]="(surveyItem.HUBFrameSources) ? surveyItem.HUBFrameSources : ''">
+
+
+                  <!--<input pInputText [readonly]="hubEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.HUBFrameSources) ? surveyItem.HUBFrameSources : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Published GEO Levels:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.HUBPublishedGEOLevels"
+                    (keydown.enter)="updatedMessage('HUB_x002d_PublishedGEOLevels', surveyItem.HUBPublishedGEOLevels, 'Published GEO Levels')"
+                    (blur)="updatedMessage('HUB_x002d_PublishedGEOLevels', surveyItem.HUBPublishedGEOLevels, 'Published GEO Levels')"
+                    (focus)="storeCurrentVal(surveyItem.HUBPublishedGEOLevels)" [readonly]="hubEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.HUBPublishedGEOLevels) ? surveyItem.HUBPublishedGEOLevels : ''">
+
+                  <!--<input pInputText [readonly]="hubEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.HUBPublishedGEOLevels) ? surveyItem.HUBPublishedGEOLevels : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Published NAICS Levels:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.HUBPublishedNAICSLevels"
+                    (keydown.enter)="updatedMessage('HUB_x002d_PublishedNAICSLevels', surveyItem.HUBPublishedNAICSLevels, 'Published NAICS Levels')"
+                    (blur)="updatedMessage('HUB_x002d_PublishedNAICSLevels', surveyItem.HUBPublishedNAICSLevels, 'Published NAICS Levels')"
+                    (focus)="storeCurrentVal(surveyItem.HUBPublishedNAICSLevels)" [readonly]="hubEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.HUBPublishedNAICSLevels) ? surveyItem.HUBPublishedNAICSLevels : ''">
+
+                  <!--<input pInputText [readonly]="hubEdit" id="" style="width:90%;"
+                    [value]="(surveyItem.HUBPublishedNAICSLevels) ? surveyItem.HUBPublishedNAICSLevels : ''">-->
+                </div>
+              </div>
+
+            </div>
+
+            <div style="float: right; width: 50%; height: auto;">
+
+              <div class="">
+                <div><label style="min-width: 90%;">Key Data Items:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.HUBKeyDataItems"
+                    (keydown.enter)="updatedMessage('HUB_x002d_KeyDataItems', surveyItem.HUBKeyDataItems, 'Key Data Items')"
+                    (blur)="updatedMessage('HUB_x002d_KeyDataItems', surveyItem.HUBKeyDataItems, 'Key Data Items')"
+                    (focus)="storeCurrentVal(surveyItem.HUBKeyDataItems)" [readonly]="hubEdit" class=""
+                    style="width:90%;" [value]="(surveyItem.HUBKeyDataItems) ? surveyItem.HUBKeyDataItems : ''">
+
+                  <!--<input pInputText [readonly]="hubEdit" id="" style="width:90%;"
+                    [value]="(surveyItem.HUBKeyDataItems) ? surveyItem.HUBKeyDataItems : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Published Industry Levels:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.HUBPublishedIndustryLevels"
+                    (keydown.enter)="updatedMessage('HUB_x002d_PublishedIndustryLevel', surveyItem.HUBPublishedIndustryLevels, 'Published Industry Levels')"
+                    (blur)="updatedMessage('HUB_x002d_PublishedIndustryLevel', surveyItem.HUBPublishedIndustryLevels, 'Published Industry Levels')"
+                    (focus)="storeCurrentVal(surveyItem.HUBPublishedIndustryLevels)" [readonly]="hubEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.HUBPublishedIndustryLevels) ? surveyItem.HUBPublishedIndustryLevels : ''">
+
+                  <!--<input pInputText [readonly]="hubEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.HUBPublishedIndustryLevels) ? surveyItem.HUBPublishedIndustryLevels : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Other Published Levels:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.HUBOtherPublishedLevels"
+                    (keydown.enter)="updatedMessage('HUB_x002d_OtherPublishedLevels', surveyItem.HUBOtherPublishedLevels, 'Other Industry Levels')"
+                    (blur)="updatedMessage('HUB_x002d_OtherPublishedLevels', surveyItem.HUBOtherPublishedLevels, 'Other Industry Levels')"
+                    (focus)="storeCurrentVal(surveyItem.HUBOtherPublishedLevels)" [readonly]="hubEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.HUBOtherPublishedLevels) ? surveyItem.HUBOtherPublishedLevels : ''">
+
+                  <!--<input pInputText [readonly]="hubEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.HUBOtherPublishedLevels) ? surveyItem.HUBOtherPublishedLevels : ''">-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-panel>
+        <p-panel header="Section C" [collapsed]='true' [toggleable]="true"
+          [style]="{'margin-bottom':'20px', 'box-shadow':'rgb(51, 51, 51) 3px 4px 16px -3px'}">
+          <div class="sectionContainer" style="height: 200px;">
+            <div style="float: left; width: 50%; height: auto;">
+              <div class="">
+                <div><label style="min-width: 90%;">HUB Contact:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.HUBContact"
+                    (keydown.enter)="updatedMessage('HUB_x002d_Contact', surveyItem.HUBContact, 'HUB Contact')"
+                    (blur)="updatedMessage('HUB_x002d_Contact', surveyItem.HUBContact, 'HUB Contact')"
+                    (focus)="storeCurrentVal(surveyItem.HUBContact)" [readonly]="hubEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.HUBContact) ? surveyItem.HUBContact : ''">
+
+                  <!--<input pInputText [readonly]="hubEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.HUBContact) ? surveyItem.HUBContact : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">HUB Email:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.HUBEmail"
+                    (keydown.enter)="updatedMessage('HUB_x002d_Email', surveyItem.HUBEmail, 'HUB Email')"
+                    (blur)="updatedMessage('HUB_x002d_Email', surveyItem.HUBEmail, 'HUB Email')"
+                    (focus)="storeCurrentVal(surveyItem.HUBEmail)" [readonly]="hubEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.HUBEmail) ? surveyItem.HUBEmail : ''">
+
+                  <!--<input pInputText [readonly]="hubEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.HUBEmail) ? surveyItem.HUBEmail : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">HUB Contact Number:</label></div>
+                <div>
+                  <!--<input pInputText [(ngModel)]="surveyItem.HUBNumber"
+                    (keydown.enter)="updatedMessage('HUB_x002d_Number', surveyItem.HUBNumber, 'HUB Contact Number')"
+                    (blur)="updatedMessage('HUB_x002d_Number', surveyItem.HUBNumber, 'HUB Contact Number')"
+                    (focus)="storeCurrentVal(surveyItem.HUBNumber)" [readonly]="hubEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.HUBNumber) ? surveyItem.HUBNumber : ''">-->
+
+                  <p-inputMask [(ngModel)]="surveyItem.HUBNumber"
+                    (keydown.enter)="updatedMessage('HUB_x002d_Number', surveyItem.HUBNumber, 'HUB Contact Number')"
+                    mask="(999) 999-9999" (onFocus)="storeCurrentVal(surveyItem.HUBNumber)" [readonly]="hubEdit"
+                    class="" (onBlur)="updatedMessage('HUB_x002d_Number', surveyItem.HUBNumber, 'HUB Contact Number')"
+                    placeholder="(999) 999-9999">{{ surveyItem.HUBNumber }}</p-inputMask>
+                </div>
+              </div>
+            </div>
+            <div style="float: left; width: 50%; height: auto;">
+              <div class="">
+                <div><label style="min-width: 90%;">Project Code:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.HUBProjectCode"
+                    (keydown.enter)="updatedMessage('HUB_x002d_ProjectCode', surveyItem.HUBProjectCode, 'Project Code')"
+                    (blur)="updatedMessage('HUB_x002d_ProjectCode', surveyItem.HUBProjectCode, 'Project Code')"
+                    (focus)="storeCurrentVal(surveyItem.HUBProjectCode)" [readonly]="hubEdit" class=""
+                    style="width:90%;" [value]="(surveyItem.HUBProjectCode) ? surveyItem.HUBProjectCode : ''">
+
+                  <!--<input pInputText [readonly]="hubEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.HUBProjectCode) ? surveyItem.HUBProjectCode : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Funding Type:</label></div>
+                <div>
+
+                  <p-dropdown [readonly]="hubEdit" optionLabel="name"
+                    (onChange)="checkFundingType('HUB_x002d_FundingType', surveyItem.HUBFundingType, 'Funding Type')"
+                    (focus)="storeCurrentVal(surveyItem.HUBFundingType)" [options]="fundingTypes"
+                    [(ngModel)]="surveyItem.HUBFundingType" [style]="{'width':'40%'}"
+                    [placeholder]="surveyItem.HUBFundingType"></p-dropdown>
+                </div>
+              </div>
+              <div class="" *ngIf="showFundingOther">
+                <div><label style="min-width: 90%;">Funding Type (Other):</label></div>
+                <div><input pInputText [(ngModel)]="surveyItem.HUBFundingType.name"
+                    (keydown.enter)="updatedMessage('HUB_x002d_FundingType', surveyItem.HUBFundingType, 'Funding Type')"
+                    (blur)="updatedMessage('HUB_x002d_FundingType', surveyItem.HUBFundingType, 'Funding Type')"
+                    (focus)="storeCurrentVal(surveyItem.HUBFundingType)" [readonly]="hubEdit" class=""
+                    style="width:90%;" [value]="(surveyItem.HUBFundingType) ? surveyItem.HUBFundingType : ''"></div>
+              </div>
+            </div>
+          </div>
+        </p-panel>
+        <p-panel header="Section D" [collapsed]='true' [toggleable]="true"
+          [style]="{'margin-bottom':'20px', 'box-shadow':'rgb(51, 51, 51) 3px 4px 16px -3px'}">
+          <div class="sectionContainer" style="height: 155px;">
+            <div class="" style="margin-top:0px; width: 100%">
+              <div><label style="min-width: 90%;">Description:</label></div>
+              <div>
+                <textarea pInputTextarea [(ngModel)]="surveyItem.HUBDescription" [readonly]="hubEdit"
+                  style="width:100%; height:120px;" id=""
+                  [value]="(surveyItem.HUBDescription) ? surveyItem.HUBDescription : ''"
+                  (focus)="storeCurrentVal(surveyItem.HUBDescription)"
+                  (blur)="updatedMessage('HUB_x002d_Description', surveyItem.HUBDescription, 'Description')"></textarea>
+
+                <!--<textarea pInputTextarea [readonly]="hubEdit" style="width:100%; height:120px;" id=""
+                  [value]="(surveyItem.HUBDescription) ? surveyItem.HUBDescription : ''"></textarea>-->
+              </div>
+            </div>
+          </div>
+        </p-panel>
+      </div>
+    </p-tabPanel>
+    <p-tabPanel header="OMB" [leftIcon]="ombCheck" rightIcon="r">
+      <div class="itemContainer">
+        <p-panel header="Section A" [collapsed]='true' [toggleable]="true"
+          [style]="{'margin-bottom':'20px', 'box-shadow':'rgb(51, 51, 51) 3px 4px 16px -3px'}">
+          <div class="sectionContainer" style="height: 265px;">
+            <div style="float: left; width: 50%; height: auto;">
+
+              <div class="">
+                <div><label style="min-width: 90%;">Directorate:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.OMBDirectorate"
+                    (keydown.enter)="updatedMessage('OMB_x002d_Directorate', surveyItem.OMBDirectorate, 'Directorate')"
+                    (blur)="updatedMessage('OMB_x002d_Directorate', surveyItem.OMBDirectorate, 'Directorate')"
+                    (focus)="storeCurrentVal(surveyItem.OMBDirectorate)" [readonly]="ombEdit" class=""
+                    style="width:90%;" [value]="(surveyItem.OMBDirectorate) ? surveyItem.OMBDirectorate : ''">
+
+                  <!--<input [readonly]="ombEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.OMBDirectorate) ? surveyItem.OMBDirectorate : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Division:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.OMBDivision"
+                    (keydown.enter)="updatedMessage('OMB_x002d_Division', surveyItem.OMBDivision, 'Division')"
+                    (blur)="updatedMessage('OMB_x002d_Division', surveyItem.OMBDivision, 'Division')"
+                    (focus)="storeCurrentVal(surveyItem.OMBDivision)" [readonly]="ombEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.OMBDivision) ? surveyItem.OMBDivision : ''">
+
+                  <!--<input [readonly]="ombEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.OMBDivision) ? surveyItem.OMBDivision : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">OMB Number:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.OMBNumber"
+                    (keydown.enter)="updatedMessage('OMB_x002d_Number', surveyItem.OMBNumber, 'OMB Number')"
+                    (blur)="updatedMessage('OMB_x002d_Number', surveyItem.OMBNumber, 'OMB Number')"
+                    (focus)="storeCurrentVal(surveyItem.OMBNumber)" [readonly]="ombEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.OMBNumber) ? surveyItem.OMBNumber : ''">
+
+                  <!--<input [readonly]="ombEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.OMBNumber) ? surveyItem.OMBNumber : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">OMB Exp. Date:</label></div>
+                <div>
+                  <!--<input pInputText [(ngModel)]="surveyItem.OMBExpDate"
+                    (keydown.enter)="updatedMessage('OMB_x002d_ExpDate', surveyItem.OMBExpDate, 'OMB Exp. Date')"
+                    (blur)="updatedMessage('OMB_x002d_ExpDate', surveyItem.OMBExpDate, 'OMB Exp. Date')"
+                    (focus)="storeCurrentVal(surveyItem.OMBExpDate)" [readonly]="ombEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.OMBExpDate) ? surveyItem.OMBExpDate : ''">-->
+
+                  <p-inputMask [(ngModel)]="surveyItem.OMBExpCalc"
+                    (keydown.enter)="updatedMessage('OMB_x002d_ExpDate', surveyItem.OMBExpCalc, 'OMB Exp. Date')"
+                    mask="99/99/9999" (onFocus)="storeCurrentVal(surveyItem.OMBExpCalc)" [readonly]="ombEdit" class=""
+                    (onBlur)="updatedMessage('OMB_x002d_ExpDate', surveyItem.OMBExpCalc, 'OMB Exp. Date')"
+                    slotChar="mm/dd/yyyy" [placeholder]="mm/dd/yyyy">{{ surveyItem.OMBExpCalc }}</p-inputMask>
+                </div>
+              </div>
+            </div>
+            <div style="float: right; width: 50%; height: auto;">
+
+              <div class="">
+                <div><label style="min-width: 90%;">OMB Contact:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.OMBContact"
+                    (keydown.enter)="updatedMessage('OMB_x002d_Contact', surveyItem.OMBContact, 'OMB Contact')"
+                    (blur)="updatedMessage('OMB_x002d_Contact', surveyItem.OMBContact, 'OMB Contact')"
+                    (focus)="storeCurrentVal(surveyItem.OMBContact)" [readonly]="ombEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.OMBContact) ? surveyItem.OMBContact : ''">
+
+                  <!--<input [readonly]="ombEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.OMBContact) ? surveyItem.OMBContact : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">OMB Email:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.OMBEmail"
+                    (keydown.enter)="updatedMessage('OMB_x002d_Email', surveyItem.OMBEmail, 'OMB Email')"
+                    (blur)="updatedMessage('OMB_x002d_Email', surveyItem.OMBEmail, 'OMB Email')"
+                    (focus)="storeCurrentVal(surveyItem.OMBEmail)" [readonly]="ombEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.OMBEmail) ? surveyItem.OMBEmail : ''">
+
+                  <!--<input [readonly]="ombEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.OMBEmail) ? surveyItem.OMBEmail : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">OMB Phone Number:</label></div>
+                <div>
+                  <!--<input pInputText [(ngModel)]="surveyItem.OMBPhoneNumber"
+                    (keydown.enter)="updatedMessage('OMB_x002d_PhoneNumber', surveyItem.OMBPhoneNumber, 'OMB Phone Number')"
+                    (blur)="updatedMessage('OMB_x002d_PhoneNumber', surveyItem.OMBPhoneNumber, 'OMB Phone Number')"
+                    (focus)="storeCurrentVal(surveyItem.OMBPhoneNumber)" [readonly]="ombEdit" class=""
+                    style="width:90%;" [value]="(surveyItem.OMBPhoneNumber) ? surveyItem.OMBPhoneNumber : ''">-->
+
+                  <p-inputMask [(ngModel)]="surveyItem.OMBPhoneNumber"
+                    (keydown.enter)="updatedMessage('OMB_x002d_PhoneNumber', surveyItem.OMBPhoneNumber, 'OMB Phone Number')"
+                    mask="(999) 999-9999" (onFocus)="storeCurrentVal(surveyItem.OMBPhoneNumber)" [readonly]="ombEdit"
+                    class=""
+                    (onBlur)="updatedMessage('OMB_x002d_PhoneNumber', surveyItem.OMBPhoneNumber, 'OMB Phone Number')"
+                    placeholder="(999) 999-9999">{{ surveyItem.OMBPhoneNumber }}</p-inputMask>
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">ADC Over Survey:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.OMBADCoverSurvey"
+                    (keydown.enter)="updatedMessage('OMB_x002d_ADCoverSurvey', surveyItem.OMBADCoverSurvey, 'ADC Over Survey')"
+                    (blur)="updatedMessage('OMB_x002d_ADCoverSurvey', surveyItem.OMBADCoverSurvey, 'ADC Over Survey')"
+                    (focus)="storeCurrentVal(surveyItem.OMBADCoverSurvey)" [readonly]="ombEdit" class=""
+                    style="width:90%;" [value]="(surveyItem.OMBADCoverSurvey) ? surveyItem.OMBADCoverSurvey : ''">
+
+                  <!--<input [readonly]="ombEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.OMBADCoverSurvey) ? surveyItem.OMBADCoverSurvey : ''">-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-panel>
+        <p-panel header="Section B" [collapsed]='true' [toggleable]="true"
+          [style]="{'margin-bottom':'20px', 'box-shadow':'rgb(51, 51, 51) 3px 4px 16px -3px'}">
+          <div class="sectionContainer" style="height: 540px;">
+            <div style="float: left; width: 50%; height: auto;">
+
+              <div class="">
+                <div><label style="min-width: 90%;">Status As Of:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.OMBStatusAsOf"
+                    (keydown.enter)="updatedMessage('OMB_x002d_StatusAsOf', surveyItem.OMBStatusAsOf, 'Status As Of')"
+                    (blur)="updatedMessage('OMB_x002d_StatusAsOf', surveyItem.OMBStatusAsOf, 'Status As Of')"
+                    (focus)="storeCurrentVal(surveyItem.OMBStatusAsOf)" [readonly]="ombEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.OMBStatusAsOf) ? surveyItem.OMBStatusAsOf : ''">
+
+                  <!--<input [readonly]="ombEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.OMBStatusAsOf) ? surveyItem.OMBStatusAsOf : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Number of Respondents:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.OMBNumofRespondents"
+                    (keydown.enter)="updatedMessage('OMB_x002d_NumofRespondents', surveyItem.OMBNumofRespondents, 'Number of Respondents')"
+                    (blur)="updatedMessage('OMB_x002d_NumofRespondents', surveyItem.OMBNumofRespondents, 'Number of Respondents')"
+                    (focus)="storeCurrentVal(surveyItem.OMBNumofRespondents)" [readonly]="ombEdit" class=""
+                    style="width:90%;" [value]="(surveyItem.OMBNumofRespondents) ? surveyItem.OMBNumofRespondents : ''">
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Number of Respondents (Average):</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.OMBNumofRespondentsAVG"
+                    (keydown.enter)="updatedMessage('OMB_x002d_NumofRespondentsAVG', surveyItem.OMBNumofRespondentsAVG, 'Number of Respondents (Average)')"
+                    (blur)="updatedMessage('OMB_x002d_NumofRespondentsAVG', surveyItem.OMBNumofRespondentsAVG, 'Number of Respondents (Average)')"
+                    (focus)="storeCurrentVal(surveyItem.OMBNumofRespondentsAVG)" [readonly]="ombEdit" class=""
+                    style="width:90%;" [value]="(surveyItem.OMBNumofRespondentsAVG) ? surveyItem.OMBNumofRespondentsAVG : ''">
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Number of Annual Responses:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.OMBNumofAnnualResponses"
+                    (keydown.enter)="updatedMessage('OMB_x002d_NumofAnnualResponses', surveyItem.OMBNumofAnnualResponses, 'Number of Annual Responses')"
+                    (blur)="updatedMessage('OMB_x002d_NumofAnnualResponses', surveyItem.OMBNumofAnnualResponses, 'Number of Annual Responses')"
+                    (focus)="storeCurrentVal(surveyItem.OMBNumofAnnualResponses)" [readonly]="ombEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.OMBNumofAnnualResponses) ? surveyItem.OMBNumofAnnualResponses : ''">
+
+                  <!--<input [readonly]="ombEdit" id="" style="width:90%;"
+                    [value]="(surveyItem.OMBNumofRespondents) ? surveyItem.OMBNumofRespondents : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Annual Burden Hours:</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.OMBAnnualBurdenHours"
+                    (keydown.enter)="updatedMessage('OMB_x002d_AnnualBurdenHours', surveyItem.OMBAnnualBurdenHours, 'Annual Burden Hours')"
+                    (blur)="updatedMessage('OMB_x002d_AnnualBurdenHours', surveyItem.OMBAnnualBurdenHours, 'Annual Burden Hours')"
+                    (focus)="storeCurrentVal(surveyItem.OMBAnnualBurdenHours)" [readonly]="ombEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.OMBAnnualBurdenHours) ? surveyItem.OMBAnnualBurdenHours : ''">
+
+                  <!--<input [readonly]="ombEdit" id="" style="width:90%;"
+                    [value]="(surveyItem.OMBAnnualBurdenHours) ? surveyItem.OMBAnnualBurdenHours : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Mandatory/Voluntary:</label></div>
+                <div>
+                  <p-dropdown [readonly]="ombEdit" optionLabel="name"
+                    (onChange)="updatedMessageDropDown('OMB_x002d_MandatoryVoluntary', surveyItem.OMBMandatoryVoluntary, 'Mandatory/Voluntary')"
+                    (focus)="storeCurrentVal(surveyItem.OMBMandatoryVoluntary)" [options]="mandatoryVoluntary"
+                    [(ngModel)]="surveyItem.OMBMandatoryVoluntary" [style]="{'width':'30%'}"
+                    [placeholder]="surveyItem.OMBMandatoryVoluntary"></p-dropdown>
+
+                  <!--<input [readonly]="ombEdit" id="" style="width:90%;"
+                    [value]="(surveyItem.OMBMandatoryVoluntary) ? surveyItem.OMBMandatoryVoluntary : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Frequency Of Reporting:</label></div>
+                <div>
+                  <p-dropdown [readonly]="ombEdit" optionLabel="name"
+                    (onChange)="updatedMessageDropDown('OMB_x002d_FrequencyOfReporting', surveyItem.OMBFrequencyOfReporting, 'Frequency Of Reporting')"
+                    (focus)="storeCurrentVal(surveyItem.OMBFrequencyOfReporting)" [options]="reportingFrequencies"
+                    [(ngModel)]="surveyItem.OMBFrequencyOfReporting" [style]="{'width':'40%'}"
+                    [placeholder]="surveyItem.OMBFrequencyOfReporting"></p-dropdown>
+
+                  <!--<input [readonly]="ombEdit" id="" style="width:90%;"
+                      [value]="(surveyItem.OMBFrequencyOfReporting) ? surveyItem.OMBFrequencyOfReporting : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Collection Year(s):</label></div>
+                <div>
+                  <input pInputText [(ngModel)]="surveyItem.CollectionYear"
+                    (keydown.enter)="updatedMessage('CollectionYear', surveyItem.CollectionYear, 'Collection Year(s)')"
+                    (blur)="updatedMessage('CollectionYear', surveyItem.CollectionYear, 'Collection Year(s)')"
+                    (focus)="storeCurrentVal(surveyItem.CollectionYear)" [readonly]="ombEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.CollectionYear) ? surveyItem.CollectionYear : ''">
+
+                  <!--<input [readonly]="ombEdit" id="" style="width:90%;"
+                    [value]="(surveyItem.OMBAnnualBurdenHours) ? surveyItem.OMBAnnualBurdenHours : ''">-->
+                </div>
+              </div>
+            </div>
+            <div style="float: right; width: 50%; height: auto;">
+              <div class="">
+                <div><label style="min-width: 90%;">Authority:</label></div>
+                <div>
+                  <textarea pInputTextarea [(ngModel)]="surveyItem.OMBAuthority" [readonly]="ombEdit"
+                    style="width:95%; height:120px;" id=""
+                    [value]="(surveyItem.OMBAuthority) ? surveyItem.OMBAuthority : ''"
+                    (focus)="storeCurrentVal(surveyItem.OMBAuthority)"
+                    (blur)="updatedMessage('OMB_x002d_Authority', surveyItem.OMBAuthority, 'Authority')"></textarea>
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Form Number Paths:</label></div>
+                <div>
+                  <textarea pInputTextarea [(ngModel)]="surveyItem.OMBFormNumPaths" [readonly]="ombEdit"
+                    style="width:95%; height:120px;" id=""
+                    [value]="(surveyItem.OMBFormNumPaths) ? surveyItem.OMBFormNumPaths : ''"
+                    (focus)="storeCurrentVal(surveyItem.OMBFormNumPaths)"
+                    (blur)="updatedMessage('OMB_x002d_FormNumPaths', surveyItem.OMBFormNumPaths, 'Form Number Paths')"></textarea>
+
+                  <!--
+                  <input pInputText [(ngModel)]="surveyItem.OMBFormNumPaths"
+                    (keydown.enter)="updatedMessage('', surveyItem.OMBFormNumPaths, 'Form Number Paths')"
+                    (blur)="updatedMessage('', surveyItem.OMBFormNumPaths, 'Form Number Paths')"
+                    (focus)="storeCurrentVal(surveyItem.OMBFormNumPaths)" [readonly]="ombEdit" class=""
+                    style="width:90%;" [value]="(surveyItem.OMBFormNumPaths) ? surveyItem.OMBFormNumPaths : ''">
+
+                  <input [readonly]="ombEdit" id="" style="width:90%;"
+                    [value]="(surveyItem.OMBFormNumPaths) ? surveyItem.OMBFormNumPaths : ''">-->
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Avg Time to Complete:</label></div>
+                <div>
+                  <textarea pInputTextarea [(ngModel)]="surveyItem.OMBAvgTimetoComplete" [readonly]="ombEdit"
+                    style="width:95%; height:120px;" id=""
+                    [value]="(surveyItem.OMBAvgTimetoComplete) ? surveyItem.OMBAvgTimetoComplete : ''"
+                    (focus)="storeCurrentVal(surveyItem.OMBAvgTimetoComplete)"
+                    (blur)="updatedMessage('OMB_x002d_AvgTimetoComplete', surveyItem.OMBAvgTimetoComplete, 'Avg Time to Complete')"></textarea>
+
+                  <!--
+                  <input pInputText [(ngModel)]="surveyItem.OMBAvgTimetoComplete"
+                    (keydown.enter)="updatedMessage('', surveyItem.OMBAvgTimetoComplete, 'Avg Time to Complete')"
+                    (blur)="updatedMessage('', surveyItem.OMBAvgTimetoComplete, 'Avg Time to Complete')"
+                    (focus)="storeCurrentVal(surveyItem.OMBAvgTimetoComplete)" [readonly]="ombEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.OMBAvgTimetoComplete) ? surveyItem.OMBAvgTimetoComplete : ''">
+
+                  <input [readonly]="ombEdit" class="" style="width:90%;"
+                    [value]="(surveyItem.OMBAvgTimetoComplete) ? surveyItem.OMBAvgTimetoComplete : ''">-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-panel>
+        <p-panel header="Section C" [collapsed]='true' [toggleable]="true"
+          [style]="{'margin-bottom':'20px', 'box-shadow':'rgb(51, 51, 51) 3px 4px 16px -3px'}">
+          <div class="sectionContainer" style="height: 580px;">
+            <div style="float: left; width: 50%; height: auto;">
+              <div class="">
+                <div><label style="min-width: 90%;">Prenotice Published Planned:</label></div>
+                <div>
+
+                  <p-inputMask [(ngModel)]="surveyItem.OMBPrenoticePublishedPlanned"
+                    (keydown.enter)="updatedMessage('OMB_x002d_PrenoticePublishedPlan', surveyItem.OMBPrenoticePublishedPlanned, 'Prenotice Published Planned')"
+                    mask="99/99/9999" (onFocus)="storeCurrentVal(surveyItem.OMBPrenoticePublishedPlanned)"
+                    [readonly]="ombEdit" class=""
+                    (onBlur)="updatedMessage('OMB_x002d_PrenoticePublishedPlan', surveyItem.OMBPrenoticePublishedPlanned, 'Prenotice Published Planned')"
+                    slotChar="mm/dd/yyyy" placeholder="mm/dd/yyyy">{{ surveyItem.OMBPrenoticePublishedPlanned }}
+                  </p-inputMask>
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Prenotice to PRA Officer:</label></div>
+                <div>
+                  <!--<input pInputText [(ngModel)]="surveyItem.OMBPrenoticetoPRAOfficer"
+                    (keydown.enter)="updatedMessage('OMB_x002d_PrenoticetoPRAOfficer', surveyItem.OMBPrenoticetoPRAOfficer, 'Prenotice to PRA Officer')"
+                    (blur)="updatedMessage('OMB_x002d_PrenoticetoPRAOfficer', surveyItem.OMBPrenoticetoPRAOfficer, 'Prenotice to PRA Officer')"
+                    (focus)="storeCurrentVal(surveyItem.OMBPrenoticetoPRAOfficer)" [readonly]="ombEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.OMBPrenoticetoPRAOfficer) ? surveyItem.OMBPrenoticetoPRAOfficer : ''">-->
+
+                  <p-inputMask [(ngModel)]="surveyItem.OMBPrenoticetoPRAOfficer"
+                    (keydown.enter)="updatedMessage('OMB_x002d_PrenoticetoPRAOfficer', surveyItem.OMBPrenoticetoPRAOfficer, 'Prenotice to PRA Officer')"
+                    mask="99/99/9999" (onFocus)="storeCurrentVal(surveyItem.OMBPrenoticetoPRAOfficer)"
+                    [readonly]="ombEdit" class=""
+                    (onBlur)="updatedMessage('OMB_x002d_PrenoticetoPRAOfficer', surveyItem.OMBPrenoticetoPRAOfficer, 'Prenotice to PRA Officer')"
+                    slotChar="mm/dd/yyyy" placeholder="mm/dd/yyyy">{{ surveyItem.OMBPrenoticetoPRAOfficer }}
+                  </p-inputMask>
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Prenotice Published Actual:</label></div>
+                <div>
+                  <!--<input pInputText [(ngModel)]="surveyItem.OMBPrenoticePublishedActual"
+                    (keydown.enter)="updatedMessage('OMB_x002d_PrenoticePublishedActu', surveyItem.OMBPrenoticePublishedActual, 'Prenotice Published Actual')"
+                    (blur)="updatedMessage('OMB_x002d_PrenoticePublishedActu', surveyItem.OMBPrenoticePublishedActual, 'Prenotice Published Actual')"
+                    (focus)="storeCurrentVal(surveyItem.OMBPrenoticePublishedActual)" [readonly]="ombEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.OMBPrenoticePublishedActual) ? surveyItem.OMBPrenoticePublishedActual : ''">-->
+
+                  <p-inputMask [(ngModel)]="surveyItem.OMBPrenoticePublishedActual"
+                    (keydown.enter)="updatedMessage('OMB_x002d_PrenoticePublishedActu', surveyItem.OMBPrenoticePublishedActual, 'Prenotice Published Actual')"
+                    mask="99/99/9999" (onFocus)="storeCurrentVal(surveyItem.OMBPrenoticePublishedActual)"
+                    [readonly]="ombEdit" class=""
+                    (onBlur)="updatedMessage('OMB_x002d_PrenoticePublishedActu', surveyItem.OMBPrenoticePublishedActual, 'Prenotice Published Actual')"
+                    slotChar="mm/dd/yyyy" placeholder="mm/dd/yyyy">{{ surveyItem.OMBPrenoticePublishedActual }}
+                  </p-inputMask>
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Review 1st Draft:</label></div>
+                <div>
+                  <p-inputMask [(ngModel)]="surveyItem.OMBReview1stDraft"
+                    (keydown.enter)="updatedMessage('OMB_x002d_Review1stDraft', surveyItem.OMBReview1stDraft, 'Review 1st Draft')"
+                    mask="99/99/9999" (onFocus)="storeCurrentVal(surveyItem.OMBReview1stDraft)" [readonly]="ombEdit"
+                    class=""
+                    (onBlur)="updatedMessage('OMB_x002d_Review1stDraft', surveyItem.OMBReview1stDraft, 'Review 1st Draft')"
+                    slotChar="mm/dd/yyyy" placeholder="mm/dd/yyyy">{{ surveyItem.OMBReview1stDraft }}</p-inputMask>
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Approved by DC:</label></div>
+                <div>
+                  <p-inputMask [(ngModel)]="surveyItem.OMBApprovedbyDC"
+                    (keydown.enter)="updatedMessage('OMB_x002d_ApprovedbyDC', surveyItem.OMBApprovedbyDC, 'Approved by DC')"
+                    mask="99/99/9999" (onFocus)="storeCurrentVal(surveyItem.OMBApprovedbyDC)" [readonly]="ombEdit"
+                    class=""
+                    (onBlur)="updatedMessage('OMB_x002d_ApprovedbyDC', surveyItem.OMBApprovedbyDC, 'Approved by DC')"
+                    slotChar="mm/dd/yyyy" placeholder="mm/dd/yyyy">{{ surveyItem.OMBApprovedbyDC }}</p-inputMask>
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Approved by Legal:</label></div>
+                <div>
+                  <!--<input pInputText [(ngModel)]="surveyItem.OMBApprovedbyLegal"
+                    (keydown.enter)="updatedMessage('OMB_x002d_ApprovedbyLegal',surveyItem.OMBApprovedbyLegal, 'Approved by Legal')"
+                    (blur)="updatedMessage('OMB_x002d_ApprovedbyLegal',surveyItem.OMBApprovedbyLegal, 'Approved by Legal')"
+                    (focus)="storeCurrentVal(surveyItem.OMBApprovedbyLegal)" [readonly]="ombEdit" class=""
+                    style="width:90%;" [value]="(surveyItem.OMBApprovedbyLegal) ? surveyItem.OMBApprovedbyLegal : ''">-->
+
+                  <p-inputMask [(ngModel)]="surveyItem.OMBApprovedbyLegal"
+                    (keydown.enter)="updatedMessage('OMB_x002d_ApprovedbyLegal', surveyItem.OMBApprovedbyLegal, 'Approved by Legal')"
+                    mask="99/99/9999" (onFocus)="storeCurrentVal(surveyItem.OMBApprovedbyLegal)" [readonly]="ombEdit"
+                    class=""
+                    (onBlur)="updatedMessage('OMB_x002d_ApprovedbyLegal', surveyItem.OMBApprovedbyLegal, 'Approved by Legal')"
+                    slotChar="mm/dd/yyyy" placeholder="mm/dd/yyyy">{{ surveyItem.OMBApprovedbyLegal }}</p-inputMask>
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Approved by Asst. Director:</label></div>
+                <div>
+                  <!--<input pInputText [(ngModel)]="surveyItem.OMBApprovedbyAsstDirector"
+                    (keydown.enter)="updatedMessage('OMB_x002d_ApprovedbyAsstDirector',surveyItem.OMBApprovedbyAsstDirector, 'Approved by Asst. Director')"
+                    (blur)="updatedMessage('OMB_x002d_ApprovedbyAsstDirector',surveyItem.OMBApprovedbyAsstDirector, 'Approved by Asst. Director')"
+                    (focus)="storeCurrentVal(surveyItem.OMBApprovedbyAsstDirector)" [readonly]="ombEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.OMBApprovedbyAsstDirector) ? surveyItem.OMBApprovedbyAsstDirector : ''">-->
+
+                  <p-inputMask [(ngModel)]="surveyItem.OMBApprovedbyAsstDirector"
+                    (keydown.enter)="updatedMessage('OMB_x002d_ApprovedbyAsstDirector', surveyItem.OMBApprovedbyAsstDirector, 'Approved by Asst. Director')"
+                    mask="99/99/9999" (onFocus)="storeCurrentVal(surveyItem.OMBApprovedbyAsstDirector)"
+                    [readonly]="ombEdit" class=""
+                    (onBlur)="updatedMessage('OMB_x002d_ApprovedbyAsstDirector', surveyItem.OMBApprovedbyAsstDirector, 'Approved by Asst. Director')"
+                    slotChar="mm/dd/yyyy" placeholder="mm/dd/yyyy">{{ surveyItem.OMBApprovedbyAsstDirector }}
+                  </p-inputMask>
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Approved by Associate Director:</label></div>
+                <div>
+                  <!--<input pInputText [(ngModel)]="surveyItem.OMBApprovedbyAssociateDirector"
+                    (keydown.enter)="updatedMessage('OMB_x002d_ApprovedbyAssociateDir',surveyItem.OMBApprovedbyAssociateDirector, 'Approved by Associate Director')"
+                    (blur)="updatedMessage('OMB_x002d_ApprovedbyAssociateDir',surveyItem.OMBApprovedbyAssociateDirector, 'Approved by Associate Director')"
+                    (focus)="storeCurrentVal(surveyItem.OMBApprovedbyAssociateDirector)" [readonly]="ombEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.OMBApprovedbyAssociateDirector) ? surveyItem.OMBApprovedbyAssociateDirector : ''">-->
+
+                  <p-inputMask [(ngModel)]="surveyItem.OMBApprovedbyAssociateDirector"
+                    (keydown.enter)="updatedMessage('OMB_x002d_ApprovedbyAssociateDir', surveyItem.OMBApprovedbyAssociateDirector, 'Approved by Associate Director')"
+                    mask="99/99/9999" (onFocus)="storeCurrentVal(surveyItem.OMBApprovedbyAssociateDirector)"
+                    [readonly]="ombEdit" class=""
+                    (onBlur)="updatedMessage('OMB_x002d_ApprovedbyAssociateDir', surveyItem.OMBApprovedbyAssociateDirector, 'Approved by Associate Director')"
+                    slotChar="mm/dd/yyyy" placeholder="mm/dd/yyyy">{{ surveyItem.OMBApprovedbyAssociateDirector }}
+                  </p-inputMask>
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Approved by Chief PCO:</label></div>
+                <div>
+                  <!--<input pInputText [(ngModel)]="surveyItem.OMBApprovedbyChiefPCO"
+                    (keydown.enter)="updatedMessage('OMB_x002d_ApprovedbyChiefPCO',surveyItem.OMBApprovedbyChiefPCO, 'Approved by Chief PCO')"
+                    (blur)="updatedMessage('OMB_x002d_ApprovedbyChiefPCO',surveyItem.OMBApprovedbyChiefPCO, 'Approved by Chief PCO')"
+                    (focus)="storeCurrentVal(surveyItem.OMBApprovedbyChiefPCO)" [readonly]="ombEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.OMBApprovedbyChiefPCO) ? surveyItem.OMBApprovedbyChiefPCO : ''">-->
+
+                  <p-inputMask [(ngModel)]="surveyItem.OMBApprovedbyChiefPCO"
+                    (keydown.enter)="updatedMessage('OMB_x002d_ApprovedbyChiefPCO', surveyItem.OMBApprovedbyChiefPCO, 'Approved by Chief PCO')"
+                    mask="99/99/9999" (onFocus)="storeCurrentVal(surveyItem.OMBApprovedbyChiefPCO)"
+                    [readonly]="ombEdit" class=""
+                    (onBlur)="updatedMessage('OMB_x002d_ApprovedbyChiefPCO', surveyItem.OMBApprovedbyChiefPCO, 'Approved by Chief PCO')"
+                    slotChar="mm/dd/yyyy" placeholder="mm/dd/yyyy">{{ surveyItem.OMBApprovedbyChiefPCO }}</p-inputMask>
+                </div>
+              </div>
+            </div>
+            <div style="float: right; width: 50%; height: auto;">
+              <div class="">
+                <div><label style="min-width: 90%;">Approved by PRA Officer:</label></div>
+                <div>
+                  <!--<input pInputText [(ngModel)]="surveyItem.OMBApprovedbyPRAOfficer"
+                    (keydown.enter)="updatedMessage('OMB_x002d_ApprovedbyPRAOfficer', surveyItem.OMBApprovedbyPRAOfficer, 'Approved by PRA Officer')"
+                    (blur)="updatedMessage('OMB_x002d_ApprovedbyPRAOfficer', surveyItem.OMBApprovedbyPRAOfficer, 'Approved by PRA Officer')"
+                    (focus)="storeCurrentVal(surveyItem.OMBApprovedbyPRAOfficer)" [readonly]="ombEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.OMBApprovedbyPRAOfficer) ? surveyItem.OMBApprovedbyPRAOfficer : ''">-->
+
+                  <p-inputMask [(ngModel)]="surveyItem.OMBApprovedbyPRAOfficer"
+                    (keydown.enter)="updatedMessage('OMB_x002d_ApprovedbyPRAOfficer', surveyItem.OMBApprovedbyPRAOfficer, 'Approved by PRA Officer')"
+                    mask="99/99/9999" (onFocus)="storeCurrentVal(surveyItem.OMBApprovedbyPRAOfficer)"
+                    [readonly]="ombEdit" class=""
+                    (onBlur)="updatedMessage('OMB_x002d_ApprovedbyPRAOfficer', surveyItem.OMBApprovedbyPRAOfficer, 'Approved by PRA Officer')"
+                    slotChar="mm/dd/yyyy" placeholder="mm/dd/yyyy">{{ surveyItem.OMBApprovedbyPRAOfficer }}
+                  </p-inputMask>
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Signed by Deputy Director:</label></div>
+                <div>
+                  <!--<input pInputText [(ngModel)]="surveyItem.OMBSignedbyDeputyDirector"
+                    (keydown.enter)="updatedMessage('OMB_x002d_SignedbyDeputyDirector', surveyItem.OMBSignedbyDeputyDirector, 'Signed by Deputy Director')"
+                    (blur)="updatedMessage('OMB_x002d_SignedbyDeputyDirector', surveyItem.OMBSignedbyDeputyDirector, 'Signed by Deputy Director')"
+                    (focus)="storeCurrentVal(surveyItem.OMBSignedbyDeputyDirector)" [readonly]="ombEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.OMBSignedbyDeputyDirector) ? surveyItem.OMBSignedbyDeputyDirector : ''">-->
+
+                  <p-inputMask [(ngModel)]="surveyItem.OMBSignedbyDeputyDirector"
+                    (keydown.enter)="updatedMessage('OMB_x002d_SignedbyDeputyDirector', surveyItem.OMBSignedbyDeputyDirector, 'Signed by Deputy Director')"
+                    mask="99/99/9999" (onFocus)="storeCurrentVal(surveyItem.OMBSignedbyDeputyDirector)"
+                    [readonly]="ombEdit" class=""
+                    (onBlur)="updatedMessage('OMB_x002d_SignedbyDeputyDirector', surveyItem.OMBSignedbyDeputyDirector, 'Signed by Deputy Director')"
+                    slotChar="mm/dd/yyyy" placeholder="mm/dd/yyyy">{{ surveyItem.OMBSignedbyDeputyDirector }}
+                  </p-inputMask>
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Clearance Pkg to DOC Planned:</label></div>
+                <div>
+                  <!--<input pInputText [(ngModel)]="surveyItem.OMBClearancePkgtoDOCPlanned"
+                    (keydown.enter)="updatedMessage('OMB_x002d_ClearancePkgto_x0020_D', surveyItem.OMBClearancePkgtoDOCPlanned, 'Clearance Pkg to DOC Planned')"
+                    (blur)="updatedMessage('OMB_x002d_ClearancePkgto_x0020_D', surveyItem.OMBClearancePkgtoDOCPlanned, 'Clearance Pkg to DOC Planned')"
+                    (focus)="storeCurrentVal(surveyItem.OMBClearancePkgtoDOCPlanned)" [readonly]="ombEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.OMBClearancePkgtoDOCPlanned) ? surveyItem.OMBClearancePkgtoDOCPlanned : ''">-->
+
+                  <p-inputMask [(ngModel)]="surveyItem.OMBClearancePkgtoDOCPlanned"
+                    (keydown.enter)="updatedMessage('OMB_x002d_ClearancePkgto_x0020_D', surveyItem.OMBClearancePkgtoDOCPlanned, 'Clearance Pkg to DOC Planned')"
+                    mask="99/99/9999" (onFocus)="storeCurrentVal(surveyItem.OMBClearancePkgtoDOCPlanned)"
+                    [readonly]="ombEdit" class=""
+                    (onBlur)="updatedMessage('OMB_x002d_ClearancePkgto_x0020_D', surveyItem.OMBClearancePkgtoDOCPlanned, 'Clearance Pkg to DOC Planned')"
+                    slotChar="mm/dd/yyyy" placeholder="mm/dd/yyyy">{{ surveyItem.OMBClearancePkgtoDOCPlanned }}
+                  </p-inputMask>
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Clearance Pkg to DOC Actual:</label></div>
+                <div>
+                  <!--<input pInputText [(ngModel)]="surveyItem.OMBClearancePkgtoDOCActual"
+                    (keydown.enter)="updatedMessage('OMB_x002d_ClearancePkgtoDOCActua', surveyItem.OMBClearancePkgtoDOCActual, 'Clearance Pkg to DOC Actual')"
+                    (blur)="updatedMessage('OMB_x002d_ClearancePkgtoDOCActua', surveyItem.OMBClearancePkgtoDOCActual, 'Clearance Pkg to DOC Actual')"
+                    (focus)="storeCurrentVal(surveyItem.OMBClearancePkgtoDOCActual)" [readonly]="ombEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.OMBClearancePkgtoDOCActual) ? surveyItem.OMBClearancePkgtoDOCActual : ''">-->
+
+                  <p-inputMask [(ngModel)]="surveyItem.OMBClearancePkgtoDOCActual"
+                    (keydown.enter)="updatedMessage('OMB_x002d_ClearancePkgtoDOCActua', surveyItem.OMBClearancePkgtoDOCActual, 'Clearance Pkg to DOC Actual')"
+                    mask="99/99/9999" (onFocus)="storeCurrentVal(surveyItem.OMBClearancePkgtoDOCActual)"
+                    [readonly]="ombEdit" class=""
+                    (onBlur)="updatedMessage('OMB_x002d_ClearancePkgtoDOCActua', surveyItem.OMBClearancePkgtoDOCActual, 'Clearance Pkg to DOC Actual')"
+                    slotChar="mm/dd/yyyy" placeholder="mm/dd/yyyy">{{ surveyItem.OMBClearancePkgtoDOCActual }}
+                  </p-inputMask>
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Published Submission Notice 30 Day:</label></div>
+                <div>
+                  <!--<input pInputText [(ngModel)]="surveyItem.OMBPublishedSubmissionNotice30daynotice"
+                    (keydown.enter)="updatedMessage('OMB_x002d_PublishedSubmissionNot', surveyItem.OMBPublishedSubmissionNotice30daynotice, 'Published Submission Notice 30 Day')"
+                    (blur)="updatedMessage('OMB_x002d_PublishedSubmissionNot', surveyItem.OMBPublishedSubmissionNotice30daynotice, 'Published Submission Notice 30 Day')"
+                    (focus)="storeCurrentVal(surveyItem.OMBPublishedSubmissionNotice30daynotice)" [readonly]="ombEdit"
+                    class="" style="width:90%;"
+                    [value]="(surveyItem.OMBPublishedSubmissionNotice30daynotice) ? surveyItem.OMBPublishedSubmissionNotice30daynotice : ''">-->
+
+                  <p-inputMask [(ngModel)]="surveyItem.OMBPublishedSubmissionNotice30daynotice"
+                    (keydown.enter)="updatedMessage('OMB_x002d_PublishedSubmissionNot', surveyItem.OMBPublishedSubmissionNotice30daynotice, 'Published Submission Notice 30 Day')"
+                    mask="99/99/9999" (onFocus)="storeCurrentVal(surveyItem.OMBPublishedSubmissionNotice30daynotice)"
+                    [readonly]="ombEdit" class=""
+                    (onBlur)="updatedMessage('OMB_x002d_PublishedSubmissionNot', surveyItem.OMBPublishedSubmissionNotice30daynotice, 'Published Submission Notice 30 Day')"
+                    slotChar="mm/dd/yyyy" placeholder="mm/dd/yyyy">
+                    {{ surveyItem.OMBPublishedSubmissionNotice30daynotice }}</p-inputMask>
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Clearance Pkg To OMB:</label></div>
+                <div>
+                  <!--<input pInputText [(ngModel)]="surveyItem.OMBClearancePkgToOMB"
+                    (keydown.enter)="updatedMessage('OMB_x002d_ClearancePkgToOMB', surveyItem.OMBClearancePkgToOMB, 'Clearance Pkg to OMB')"
+                    (blur)="updatedMessage('OMB_x002d_ClearancePkgToOMB', surveyItem.OMBClearancePkgToOMB, 'Clearance Pkg to OMB')"
+                    (focus)="storeCurrentVal(surveyItem.OMBClearancePkgToOMB)" [readonly]="ombEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.OMBClearancePkgToOMB) ? surveyItem.OMBClearancePkgToOMB : ''">-->
+
+                  <p-inputMask [(ngModel)]="surveyItem.OMBClearancePkgToOMB"
+                    (keydown.enter)="updatedMessage('OMB_x002d_ClearancePkgToOMB', surveyItem.OMBClearancePkgToOMB, 'Clearance Pkg to OMB')"
+                    mask="99/99/9999" (onFocus)="storeCurrentVal(surveyItem.OMBClearancePkgToOMB)" [readonly]="ombEdit"
+                    class=""
+                    (onBlur)="updatedMessage('OMB_x002d_ClearancePkgToOMB', surveyItem.OMBClearancePkgToOMB, 'Clearance Pkg to OMB')"
+                    slotChar="mm/dd/yyyy" placeholder="mm/dd/yyyy">{{ surveyItem.OMBClearancePkgToOMB }}</p-inputMask>
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Need OMB Approval:</label></div>
+                <div>
+                  <!--<input pInputText [(ngModel)]="surveyItem.OMBNeedOMBApproval"
+                    (keydown.enter)="updatedMessage('OMB_x002d_NeedOMBApproval', surveyItem.OMBNeedOMBApproval, 'Clearance Pkg to OMB')"
+                    (blur)="updatedMessage('OMB_x002d_NeedOMBApproval', surveyItem.OMBNeedOMBApproval, 'Clearance Pkg to OMB')"
+                    (focus)="storeCurrentVal(surveyItem.OMBNeedOMBApproval)" [readonly]="ombEdit" class=""
+                    style="width:90%;" [value]="(surveyItem.OMBNeedOMBApproval) ? surveyItem.OMBNeedOMBApproval : ''">-->
+
+                  <p-inputMask [(ngModel)]="surveyItem.OMBNeedOMBApproval"
+                    (keydown.enter)="updatedMessage('OMB_x002d_NeedOMBApproval', surveyItem.OMBNeedOMBApproval, 'Need OMB Approval')"
+                    mask="99/99/9999" (onFocus)="storeCurrentVal(surveyItem.OMBNeedOMBApproval)" [readonly]="ombEdit"
+                    class=""
+                    (onBlur)="updatedMessage('OMB_x002d_NeedOMBApproval', surveyItem.OMBNeedOMBApproval, 'Need OMB Approval')"
+                    slotChar="mm/dd/yyyy" placeholder="mm/dd/yyyy">{{ surveyItem.OMBNeedOMBApproval }}</p-inputMask>
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Approved by OMB:</label></div>
+                <div>
+                  <!--<input pInputText [(ngModel)]="surveyItem.OMBApprovedbyOMB"
+                    (keydown.enter)="updatedMessage('OMB_x002d_ApprovedbyOMB', surveyItem.OMBApprovedbyOMB, 'Approved by OMB')"
+                    (blur)="updatedMessage('OMB_x002d_ApprovedbyOMB', surveyItem.OMBApprovedbyOMB, 'Approved by OMB')"
+                    (focus)="storeCurrentVal(surveyItem.OMBApprovedbyOMB)" [readonly]="ombEdit" class=""
+                    style="width:90%;" [value]="(surveyItem.OMBApprovedbyOMB) ? surveyItem.OMBApprovedbyOMB : ''">-->
+
+                  <p-inputMask [(ngModel)]="surveyItem.OMBApprovedbyOMB"
+                    (keydown.enter)="updatedMessage('OMB_x002d_ApprovedbyOMB', surveyItem.OMBApprovedbyOMB, 'Approved by OMB')"
+                    mask="99/99/9999" (onFocus)="storeCurrentVal(surveyItem.OMBApprovedbyOMB)" [readonly]="ombEdit"
+                    class=""
+                    (onBlur)="updatedMessage('OMB_x002d_ApprovedbyOMB', surveyItem.OMBApprovedbyOMB, 'Approved by OMB')"
+                    slotChar="mm/dd/yyyy" placeholder="mm/dd/yyyy">{{ surveyItem.OMBApprovedbyOMB }}</p-inputMask>
+                </div>
+              </div>
+              <div class="">
+                <div><label style="min-width: 90%;">Contact Survey Owner:</label></div>
+                <div>
+                  <!--<input pInputText [(ngModel)]="surveyItem.OMBContactSurveyOwner"
+                    (keydown.enter)="updatedMessage('OMB_x002d_ContactSurveyOwner', surveyItem.OMBContactSurveyOwner, 'Contact Survey Owner')"
+                    (blur)="updatedMessage('OMB_x002d_ContactSurveyOwner', surveyItem.OMBContactSurveyOwner, 'Contact Survey Owner')"
+                    (focus)="storeCurrentVal(surveyItem.OMBContactSurveyOwner)" [readonly]="ombEdit" class=""
+                    style="width:90%;"
+                    [value]="(surveyItem.OMBContactSurveyOwner) ? surveyItem.OMBContactSurveyOwner : ''">-->
+
+                  <p-inputMask [(ngModel)]="surveyItem.OMBContactSurveyOwner"
+                    (keydown.enter)="updatedMessage('OMB_x002d_ContactSurveyOwner', surveyItem.OMBContactSurveyOwner, 'Contact Survey Owner')"
+                    mask="99/99/9999" (onFocus)="storeCurrentVal(surveyItem.OMBContactSurveyOwner)"
+                    [readonly]="ombEdit" class=""
+                    (onBlur)="updatedMessage('OMB_x002d_ContactSurveyOwner', surveyItem.OMBContactSurveyOwner, 'Contact Survey Owner')"
+                    slotChar="mm/dd/yyyy" placeholder="mm/dd/yyyy">{{ surveyItem.OMBContactSurveyOwner }}</p-inputMask>
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-panel>
+        <p-panel header="Section D" [collapsed]='true' [toggleable]="true"
+          [style]="{'margin-bottom':'20px', 'box-shadow':'rgb(51, 51, 51) 3px 4px 16px -3px'}">
+          <div class="sectionContainer" style="height: 155px;">
+            <div class="">
+              <div><label style="min-width: 90%;">Notes:</label></div>
+              <div>
+                <textarea pInputTextarea [(ngModel)]="surveyItem.OMBNotes" [readonly]="ombEdit"
+                  style="width:100%; height:120px;" id="" [value]="(surveyItem.OMBNotes) ? surveyItem.OMBNotes : ''"
+                  (focus)="storeCurrentVal(surveyItem.OMBNotes)"
+                  (blur)="updatedMessage('OMB_x002d_Notes', surveyItem.OMBNotes, 'Notes')"></textarea>
+
+                <!-- <textarea [readonly]="ombEdit" style="width:100%; height:120px;" id=""
+                  [value]="(surveyItem.OMBNotes) ? surveyItem.OMBNotes : ''"></textarea>-->
+              </div>
+            </div>
+          </div>
+        </p-panel>
+      </div>
+    </p-tabPanel>
+    <p-tabPanel header="Collections" [leftIcon]="collCheck" rightIcon="">
+      <div style="background-color: #c8c8c8; box-shadow: rgb(51, 51, 51) 3px 4px 16px -3px; margin-bottom: 20px;">
+        <div class="" style="padding: 15px 0px 20px 20px !important; height: 100px;">
+          <div style="display: inline-flex">
+            <div style="width: 270px">
+              <label style="">Frequency Of Reporting:</label>
+              <br />
+              <input [disabled]='true' pInputText [readonly]="true" class="" style=""
+                [value]="surveyItem.OMBFrequencyOfReporting.value || surveyItem.OMBFrequencyOfReporting">
+            </div>
+            <!-- <div style="width: 270px">
+              <label style="">Centurion Open:</label>
+              <br />
+
+
+                <p-inputMask [(ngModel)]="surveyItem.CenturionOpen"
+                  (keydown.enter)="updatedMessage('CenturionOpen', surveyItem.CenturionOpen, 'Centurion Open')"
+                  mask="99/99/9999" (onFocus)="storeCurrentVal(surveyItem.CenturionOpen)"
+                  [readonly]="collEdit" class=""
+                  (onBlur)="updatedMessage('CenturionOpen', surveyItem.CenturionOpen, 'Centurion Open')"
+                  slotChar="mm/dd/yyyy" placeholder="mm/dd/yyyy">{{ surveyItem.CenturionOpen }}
+                </p-inputMask>
+            </div>
+            <div style="width: 270px">
+              <label style="">Centurion Closed:</label>
+              <br />
+
+            
+              <p-inputMask [(ngModel)]="surveyItem.CenturionClosed"
+                (keydown.enter)="updatedMessage('CenturionClosed', surveyItem.CenturionClosed, 'Centurion Closed')"
+                mask="99/99/9999" (onFocus)="storeCurrentVal(surveyItem.CenturionClosed)"
+                [readonly]="collEdit" class=""
+                (onBlur)="updatedMessage('CenturionClosed', surveyItem.CenturionClosed, 'Centurion Closed')"
+                slotChar="mm/dd/yyyy" placeholder="mm/dd/yyyy">{{ surveyItem.CenturionClosed }}
+              </p-inputMask>
+            </div> -->
+          </div>
+          <!--{{ surveyItem.OMBFrequencyOfReporting }}-->
+        </div>
+        <div class="itemContainer" style="padding: 0px 20px 20px 20px;">
+          <p-table *ngIf="collectionData.d" #dt [value]="collectionData.d.results" [columns]="cols">
+            <ng-template pTemplate="caption" let-rowData>
+              <div style="text-align:left; min-height: 40px;">
+                <button type="button" *ngIf="!collEdit"  class="btn btn-primary pi pi-plus"  title="Add New Record"
+                  (click)="showDialogToAdd(); colHeader = 'Collection - Add New Record'" style="cursor:pointer; font-size: 2em;"></button>
+                  <button class="btn btn-primary pi pi-download" type="button" title="Export to Excel"
+                  (click)="dt.exportCSV()" style="float:right; font-size: 2em;"></button>
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                  {{col.header}}
+                </th>
+                <th style="width:11%"></th>
+                <th style="width:11%"></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns" let-ri="rowIndex">
+              <tr>
+                <td *ngFor="let col of columns">
+                  <p-cellEditor>
+                    <!-- <ng-template pTemplate="input"
+                      *ngIf="col.field == 'Date'">
+
+                      <p-inputMask [(ngModel)]="rowData[col.field]"
+                        (keydown.enter)="updatedMessageCollections(col.id, rowData[col.field], col.header, rowData['Id'])"
+                        [readonly]="true"
+                        (onBlur)="updatedMessageCollections(col.id, rowData[col.field], col.header, rowData['Id'])"
+                        (onFocus)="storeCurrentValCollectionDates(rowData[col.field])" mask="99/99/9999"
+                        slotChar="mm/dd/yyyy" placeholder="mm/dd/yyyy"></p-inputMask>
+
+
+                    </ng-template> -->
+                    <ng-template pTemplate="output"
+                      *ngIf="col.field == 'Date'">
+                      {{rowData[col.field] || ''}}
+                    </ng-template>
+
+                    <!-- <ng-template pTemplate="input" *ngIf="col.field == 'MailType'">
+                      <p-dropdown
+                        (onChange)="updatedMessageCollDrop(rowData[col.id], rowData[col.field], col.header, rowData['Id'])"
+                        [readonly]="true" (focus)="storeCurrentVal(rowData[col.field])" [options]="mailTypes"
+                        [(ngModel)]="rowData[col.field]" [style]="{'width':'100%'}"></p-dropdown>
+                    </ng-template> -->
+                    <ng-template pTemplate="output" *ngIf="col.field == 'MailType'">
+                      {{rowData[col.field] || ''}}
+                    </ng-template>
+
+                    <!-- <ng-template pTemplate="input" *ngIf="col.field == 'CollectionType'">
+                      <p-dropdown
+                        (onChange)="updatedMessageCollDrop(rowData[col.id], rowData[col.field], col.header, rowData['Id'])"
+                        [readonly]="true" (focus)="storeCurrentVal(rowData[col.field])" [options]="mailOutTypes"
+                        [(ngModel)]="rowData[col.field]" [style]="{'width':'100%'}"></p-dropdown>
+                    </ng-template> -->
+                    <ng-template pTemplate="output" *ngIf="col.field == 'CollectionType'">
+                      {{rowData[col.field] || ''}}
+                    </ng-template>
+
+                    <!-- <ng-template pTemplate="input" *ngIf="col.field == 'QualType'">
+                      <p-dropdown
+                        (onChange)="updatedMessageCollDrop(rowData[col.id], rowData[col.field], col.header, rowData['Id'])"
+                        [readonly]="true" (focus)="storeCurrentVal(rowData[col.field])" [options]="qualTypes"
+                        [(ngModel)]="rowData[col.field]" [style]="{'width':'80%'}"></p-dropdown>
+                    </ng-template> -->
+                    <!-- <ng-template pTemplate="output" *ngIf="col.field == 'QualType'">
+                      {{rowData[col.field] || ''}}
+                    </ng-template>                     -->
+
+                    <!-- <ng-template pTemplate="input" *ngIf="col.field == 'Qual'">
+                      <p-dropdown
+                        (onChange)="updatedMessageCollDrop(rowData[col.id], rowData[col.field], col.header, rowData['Id'])"
+                        [readonly]="true" (focus)="storeCurrentVal(rowData[col.field])" [options]="quals"
+                        [(ngModel)]="rowData[col.field]" [style]="{'width':'80%'}"></p-dropdown>
+                    </ng-template> -->
+                    <ng-template pTemplate="output" *ngIf="col.field == 'Qual'">
+                      {{rowData[col.field] || ''}}
+                    </ng-template> 
+                  </p-cellEditor>
+ 
+                </td>
+                <td>
+                  <button title="Edit this row" type="button" [disabled]='collEdit' class="btn btn-danger pi pi-pencil" (click)="editCollections(rowData, ri); colHeader = 'Collections - Edit Record'" style="cursor:pointer; background-color: #DF691A !important; border-color: #DF691A; font-size: 2em;"></button>                  
+                </td>
+                <td>
+                  <button title="Delete this row" type="button" [disabled]='collEdit' class="btn btn-danger pi pi-times" (click)="deleteConfirm(rowData, ri)" style="cursor:pointer; background-color: #EB2810; border-color: #EB2810; font-size: 2em;"></button>                  
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+              <tr>
+                <td [attr.colspan]="columns.length + 2" style="text-align:center;">
+                  No records found
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>        
+        </div>
+      </div>
+    </p-tabPanel>
+    <p-tabPanel header="Must Haves" [leftIcon]="mustCheck" rightIcon="">
+      <div class="sectionContainer"
+        style="height: 800px; background-color: #cdd2d6;box-shadow: rgb(51, 51, 51) 3px 4px 16px -3px;margin-bottom: 20px;padding: 0.571em 1em;">
+        <div style="float: left; width: 50%; height: auto;">
+          <div class="" style="">
+            <div><label style="min-width: 95%;">Last Updated <i>(Read Only)</i>:</label></div>
+            <div>
+              <input pInputText [(ngModel)]="surveyItem.MUSTLastUpdated"
+                (keydown.enter)="updatedMessageMustHaves('MUST_x002d_LastUpdated', surveyItem.MUSTLastUpdated, 'Last Updated')"
+                (blur)="updatedMessageMustHaves('MUST_x002d_LastUpdated', surveyItem.MUSTLastUpdated, 'Last Updated')"
+                (focus)="storeCurrentVal(surveyItem.MUSTLastUpdated)" [readonly]="mustEdit" class="" style="width:90%;"
+                [value]="(surveyItem.MUSTLastUpdated) ? surveyItem.MUSTLastUpdated : ''">
+
+              <!--<textarea pInputTextarea [readonly]="mustEdit" style="width:95%; height:120px;" id=""
+                  [value]="(surveyItem.OMBAuthority) ? surveyItem.OMBAuthority : ''"></textarea>-->
+            </div>
+          </div>
+          <div class="" style="">
+            <div><label style="min-width: 95%;">Acronym <i>(Read Only)</i>:</label></div>
+            <div>
+              <input pInputText [(ngModel)]="surveyItem.Acronym"
+                (keydown.enter)="updatedMessageMustHaves('Acronym', surveyItem.Acronym, 'Acronym')"
+                (blur)="updatedMessageMustHaves('Acronym', surveyItem.Acronym, 'Acronym')"
+                (focus)="storeCurrentVal(surveyItem.Acronym)" [readonly]="true" class="" style="width:90%;"
+                [value]="(surveyItem.Acronym) ? surveyItem.Acronym : ''">
+
+              <!--<textarea pInputTextarea [readonly]="mustEdit" style="width:95%; height:120px;" id=""
+                      [value]="(surveyItem.OMBAuthority) ? surveyItem.OMBAuthority : ''"></textarea>-->
+            </div>
+          </div>
+          <div class="" style="">
+            <div><label style="min-width: 95%;">OMB Number <i>(Read Only)</i>:</label></div>
+            <div>
+              <input pInputText [(ngModel)]="surveyItem.OMBNumber"
+                (keydown.enter)="updatedMessageMustHaves('OMBNumber', surveyItem.OMBNumber, 'OMB Number')"
+                (blur)="updatedMessageMustHaves('OMBNumber', surveyItem.OMBNumber, 'OMB Number')"
+                (focus)="storeCurrentVal(surveyItem.OMBNumber)" [readonly]="true" class="" style="width:90%;"
+                [value]="(surveyItem.OMBNumber) ? surveyItem.OMBNumber : ''">
+
+              <!--<textarea pInputTextarea [readonly]="mustEdit" style="width:95%; height:120px;" id=""
+                    [value]="(surveyItem.OMBAuthority) ? surveyItem.OMBAuthority : ''"></textarea>-->
+            </div>
+          </div>
+          <div class="" style="margin-top:0px;">
+            <div><label style="min-width: 95%;">OMB Exp. Date <i>(Read Only)</i>:</label></div>
+            <div>
+              <input pInputText [(ngModel)]="surveyItem.OMBExpCalc"
+                (keydown.enter)="updatedMessageMustHaves('OMBExpDate', surveyItem.OMBExpDate, 'OMB Expiration')"
+                (blur)="updatedMessageMustHaves('OMBExpDate', surveyItem.OMBExpDate, 'OMB Expiration')"
+                (focus)="storeCurrentVal(surveyItem.OMBExpDate)" [readonly]="true" class="" style="width:90%;"
+                [value]="(surveyItem.OMBExpCalc) ? surveyItem.OMBExpCalc : ''">
+
+              <!--<textarea pInputTextarea [readonly]="mustEdit" style="width:95%; height:120px;" id=""
+                [value]="(surveyItem.OMBAuthority) ? surveyItem.OMBAuthority : ''"></textarea>-->
+            </div>
+          </div>
+          <div class="">
+            <div><label style="min-width: 95%;">Report Form Title:</label></div>
+            <div>
+              <input pInputText [(ngModel)]="surveyItem.MUSTReportFormTitle"
+                (keydown.enter)="updatedMessageMustHaves('MUST_x002d_ReportFormTitle', surveyItem.MUSTReportFormTitle, 'Report Form Title')"
+                (blur)="updatedMessageMustHaves('MUST_x002d_ReportFormTitle', surveyItem.MUSTReportFormTitle, 'Report Form Title')"
+                (focus)="storeCurrentVal(surveyItem.MUSTReportFormTitle)" [readonly]="mustEdit" class=""
+                style="width:90%;" [value]="(surveyItem.MUSTReportFormTitle) ? surveyItem.MUSTReportFormTitle : ''">
+
+              <!--<textarea pInputTextarea [readonly]="mustEdit" style="width:95%; height:120px;" id=""
+                [value]="(surveyItem.MUSTReportFormTitle) ? surveyItem.MUSTReportFormTitle : ''"></textarea>-->
+            </div>
+          </div>
+          <div class="" style="">
+            <div><label style="min-width: 95%;">Report Form Numbers <i>(Read Only)</i>:</label></div>
+            <div>
+              <textarea pInputTextarea [(ngModel)]="surveyItem.OMBFormNumPaths" [readonly]="true"
+                style="width:90%; height:120px;" id=""
+                [value]="(surveyItem.OMBFormNumPaths) ? surveyItem.OMBFormNumPaths : ''"
+                (focus)="storeCurrentVal(surveyItem.OMBFormNumPaths)"
+                (blur)="updatedMessageMustHaves('OMBFormNumPaths', surveyItem.OMBFormNumPaths, 'Report Form Numbers')"></textarea>
+
+
+              <!--<textarea pInputTextarea [readonly]="mustEdit" style="width:95%; height:120px;" id=""
+                    [value]="(surveyItem.OMBFormNumPaths) ? surveyItem.OMBFormNumPaths : ''"></textarea>-->
+            </div>
+          </div>
+          <div class="">
+            <div><label style="min-width: 95%;">Reporting Unit Definition:</label></div>
+            <div>
+              <textarea pInputTextarea [(ngModel)]="surveyItem.MUSTReportingUnitDefinition" [readonly]="mustEdit"
+                style="width:90%; height:120px;" id=""
+                [value]="(surveyItem.MUSTReportingUnitDefinition) ? surveyItem.MUSTReportingUnitDefinition : ''"
+                (focus)="storeCurrentVal(surveyItem.MUSTReportingUnitDefinition)"
+                (blur)="updatedMessageMustHaves('MUST_x002d_ReportingUnitDefiniti', surveyItem.MUSTReportingUnitDefinition, 'Reporting Unit Definition')"></textarea>
+
+              <!--<textarea pInputTextarea [readonly]="mustEdit" style="width:95%; height:120px;" id=""
+                [value]="(surveyItem.MUSTReportingUnitDefinition) ? surveyItem.MUSTReportingUnitDefinition : ''"></textarea>-->
+            </div>
+          </div>
+        </div>
+
+        <div style="float: right; width: 50%; height: auto;">
+          <div class="">
+            <div><label style="min-width: 95%;">Response Definition for Unit Response Rate Calculation:</label></div>
+            <div>
+              <textarea pInputTextarea [(ngModel)]="surveyItem.MUSTResponseDefinitionforURRCalculation"
+                [readonly]="mustEdit" style="width:90%; height:120px;" id=""
+                [value]="(surveyItem.MUSTResponseDefinitionforURRCalculation) ? surveyItem.MUSTResponseDefinitionforURRCalculation : ''"
+                (focus)="storeCurrentVal(surveyItem.MUSTResponseDefinitionforURRCalculation)"
+                (blur)="updatedMessageMustHaves('MUST_x002d_ResponseDefinitionfor', surveyItem.MUSTResponseDefinitionforURRCalculation, 'Response Definition for URR Calculation')"></textarea>
+
+              <!--<textarea pInputTextarea [readonly]="mustEdit" style="width:95%; height:120px;" id=""
+                [value]="(surveyItem.MUSTResponseDefinitionforURRCalculation) ? surveyItem.MUSTResponseDefinitionforURRCalculation : ''"></textarea>-->
+            </div>
+          </div>
+          <div class="" style="margin-top:0px;">
+            <div><label style="min-width: 95%;">Last Resort Response Strategy <i>(Ask the Respondent to
+                  Provide)</i>:</label></div>
+            <div>
+              <textarea pInputTextarea [(ngModel)]="surveyItem.MUSTLastresortResponseStrategy" [readonly]="mustEdit"
+                style="width:90%; height:120px;" id=""
+                [value]="(surveyItem.MUSTLastresortResponseStrategy) ? surveyItem.MUSTLastresortResponseStrategy : ''"
+                (focus)="storeCurrentVal(surveyItem.MUSTLastresortResponseStrategy)"
+                (blur)="updatedMessageMustHaves('MUST_x002d_LastresortResponseStr', surveyItem.MUSTLastresortResponseStrategy, 'Last Resort Response Strategy')"></textarea>
+
+              <!--<textarea pInputTextarea [readonly]="mustEdit" style="width:95%; height:120px;" id=""
+                [value]="(surveyItem.MUSTLastresortResponseStrategy) ? surveyItem.MUSTLastresortResponseStrategy : ''"></textarea>-->
+            </div>
+          </div>
+          <div class="" style="margin-top:0px;">
+            <div><label style="min-width: 95%;">Ineligible Criteria:</label></div>
+            <div>
+              <textarea pInputTextarea [(ngModel)]="surveyItem.MUSTIneligibleCriteria" [readonly]="mustEdit"
+                style="width:90%; height:120px;" id=""
+                [value]="(surveyItem.MUSTIneligibleCriteria) ? surveyItem.MUSTIneligibleCriteria : ''"
+                (focus)="storeCurrentVal(surveyItem.MUSTIneligibleCriteria)"
+                (blur)="updatedMessageMustHaves('MUST_x002d_IneligibleCriteria', surveyItem.MUSTIneligibleCriteria, 'Ineligible Criteria')"></textarea>
+
+              <!--<textarea pInputTextarea [readonly]="mustEdit" style="width:95%; height:120px;" id=""
+                [value]="(surveyItem.MUSTIneligibleCriteria) ? surveyItem.MUSTIneligibleCriteria : ''"></textarea>-->
+            </div>
+          </div>
+          <div class="" style="margin-top:0px;">
+            <div><label style="min-width: 95%;">Subject Matter Contact:</label></div>
+            <div>
+              <input pInputText [(ngModel)]="surveyItem.MUSTSubjectMatterContact"
+                (keydown.enter)="updatedMessageMustHaves('MUST_x002d_SubjectMatterContact', surveyItem.MUSTSubjectMatterContact, 'Subject Matter Contact')"
+                (blur)="updatedMessageMustHaves('MUST_x002d_SubjectMatterContact', surveyItem.MUSTSubjectMatterContact, 'Subject Matter Contact')"
+                (focus)="storeCurrentVal(surveyItem.MUSTSubjectMatterContact)" [readonly]="mustEdit" class=""
+                style="width:90%;"
+                [value]="(surveyItem.MUSTSubjectMatterContact) ? surveyItem.MUSTSubjectMatterContact : ''">
+
+              <!--<textarea pInputTextarea [readonly]="mustEdit" style="width:95%; height:120px;" id=""
+                [value]="(surveyItem.MUSTSubjectMatterContact) ? surveyItem.MUSTSubjectMatterContact : ''"></textarea>-->
+            </div>
+          </div>
+          <div class="" style="margin-top:0px;">
+            <div><label style="min-width: 95%;">Methodology Contact:</label></div>
+            <div>
+              <input pInputText [(ngModel)]="surveyItem.MUSTMethodologyContact"
+                (keydown.enter)="updatedMessageMustHaves('MUST_x002d_MethodologyContact', surveyItem.MUSTMethodologyContact, 'Methodology Contact')"
+                (blur)="updatedMessageMustHaves('MUST_x002d_MethodologyContact', surveyItem.MUSTMethodologyContact, 'Methodology Contact')"
+                (focus)="storeCurrentVal(surveyItem.MUSTMethodologyContact)" [readonly]="mustEdit" class=""
+                style="width:90%;"
+                [value]="(surveyItem.MUSTMethodologyContact) ? surveyItem.MUSTMethodologyContact : ''">
+
+
+              <!--<textarea pInputTextarea [readonly]="mustEdit" style="width:95%; height:120px;" id=""
+                [value]="(surveyItem.MUSTMethodologyContact) ? surveyItem.MUSTMethodologyContact : ''"></textarea>-->
+            </div>
+          </div>
+        </div>
+
+        <div class="" style="margin-top:0px;">
+          <div><label style="min-width: 90%;">Updates:</label></div>
+          <div>
+            <textarea pInputTextarea [(ngModel)]="surveyItem.MUSTSpecialNotes" [readonly]="mustEdit"
+              style="width:100%; height:120px;" id=""
+              [value]="(surveyItem.MUSTSpecialNotes) ? surveyItem.MUSTSpecialNotes : ''"
+              (focus)="storeCurrentVal(surveyItem.MUSTSpecialNotes)"
+              (blur)="updatedMessageMustHaves('MUST_x002d_SpecialNotes', surveyItem.MUSTSpecialNotes, 'Updates')"></textarea>
+
+            <!--<textarea pInputTextarea [readonly]="mustEdit" style="width:95%; height:120px;" id=""
+              [value]="(surveyItem.MUSTSpecialNotes) ? surveyItem.MUSTSpecialNotes : ''"></textarea>-->
+          </div>
+        </div>
+
+      </div>
+    </p-tabPanel>
+  </p-tabView>
+</div>
+
+<p-dialog [header]="colHeader" [(visible)]="displayDialog" [responsive]="true" showEffect="fade"
+  [modal]="true" [style]="{'width': '415px', 'left': '590px', 'top': '210px'}">
+
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12">
+      <div class="ui-g-4">
+        <label for="vin">Group:</label>
+      </div>
+      <div class="ui-g-8">
+        <p-dropdown [(ngModel)]="newCollectionArray.Group" [options]='quals'>
+          <!-- <option></option>
+          <option *ngFor="let item of quals">{{item.label}}</option> -->
+        </p-dropdown>
+      </div>
+    </div>
+    <div class="ui-g-12">
+      <div class="ui-g-4">
+        <label for="vin">Mail Type:</label>
+      </div>
+      <div class="ui-g-8">
+        <p-dropdown [(ngModel)]="newCollectionArray.MailType" [options]='mailTypes'>
+          <!-- <option></option>
+          <option *ngFor="let item of mailTypes">{{item.label}}</option> -->
+        </p-dropdown>
+      </div>
+    </div>
+    <div class="ui-g-12">
+      <div class="ui-g-4">
+        <label for="vin">Collection Type:</label>
+      </div>
+      <div class="ui-g-8">
+        <p-dropdown [(ngModel)]="newCollectionArray.CollectionType" [options]='mailOutTypes'>
+          <!-- <option></option>
+          <option *ngFor="let item of mailOutTypes">{{item.label}}</option> -->
+        </p-dropdown>
+      </div>
+    </div>
+    <div class="ui-g-12">
+      <div class="ui-g-4">
+        <label for="brand">Date:</label>
+      </div>
+      <div class="ui-g-8">
+        <p-inputMask [(ngModel)]="newCollectionArray.Date" mask="99/99/9999" slotChar=" "
+          placeholder="mm/dd/yyyy"></p-inputMask>
+          <!-- <p-calendar [(ngModel)]="newCollectionArray.Date"></p-calendar> -->
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <div class="ui-dialog-buttonpane ui-helper-clearfix">
+      <button title="Save" class="btn btn-primary pi pi-save" *ngIf="editDialog" type="button" (click)="saveToListCollections()" style="cursor:pointer; font-size: 2em;"></button>
+      <button title="Save" class="btn btn-primary pi pi-save" *ngIf="!editDialog" type="button" (click)="saveNewCollections()" style="cursor:pointer; font-size: 2em;"></button>
+      <button title="Cancel" class="btn btn-primary pi pi-times" type="button" (click)="displayDialog = false" style="cursor:pointer; font-size: 2em;"></button>
+    </div>
+  </p-footer>
+</p-dialog>

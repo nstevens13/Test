@@ -1,0 +1,335 @@
+<link rel="stylesheet" type="text/css"
+href="https://uscensus.sharepoint.com/teams/ADEP/apps/csit/SitePages/PrimeNG/primeicons.css" />
+<link rel="stylesheet" type="text/css"
+href="https://uscensus.sharepoint.com/teams/ADEP/apps/csit/SitePages/PrimeNG/theme.css" />
+<link rel="stylesheet" type="text/css"
+href="https://uscensus.sharepoint.com/teams/ADEP/apps/csit/SitePages/PrimeNG/primeng.min.css" />
+
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="large" color="#fff" type="timer"></ngx-spinner>
+<div style="text-align:center" class='' style="margin: auto; margin-top: 150px;" *ngIf="showTable == true">
+  <div>
+    <!-- <button id="back" (click)="router.navigate(['/surveyinventory'])" type="button" class="btn">Back to
+      Inventory</button> -->
+    <button title="Back to Inventory" id="back" (click)="router.navigate(['/surveyinventory'])" type="button" class="btn pi pi-chevron-left"></button>
+    <button title="Print this page" id="print" (click)="print()" type="button" class="btn pi pi-print"></button>
+    <button title="Contact Survey Owner(s)" *ngIf="surveyItem.Owner" id="contact" (click)="contactOwner()" type="button" class="btn pi pi-comments"></button>
+  </div>
+  <h2 style="color: #fff !important; text-align: center; padding: 25px;">{{surveyItem.SurveyYear}} - {{ surveyItem.SurveyName }}</h2>
+  <!--<button type="button" (click)='downloadButtonPush()'>Export</button>-->
+  <div class="itemContainer">
+    <p-panel header="OMB" [collapsed]='false' [toggleable]="true"
+      [style]="{'margin-bottom':'20px', 'box-shadow':'rgb(51, 51, 51) 3px 4px 16px -3px', 'clear': 'both'}">
+      <div class="sectionContainer" style="height: 175px;">
+        <div style="float: left; width: 50%; height: auto;">
+
+          <div class="">
+            <div style=""><label>OMB Number:</label></div>
+            <div style=""><input [readonly]="true" class="ombNumber" style="width:90%;"
+                [value]="(surveyItem.OMBNumber) ? surveyItem.OMBNumber : ''"></div>
+          </div>
+          <div class="">
+            <div style=""><label>OMB Exp. Date:</label></div>
+            <div style=""><input [readonly]="true" class="ombExp" style="width:90%;"
+                [value]="(surveyItem.OMBExpCalc) ? surveyItem.OMBExpCalc : ''"></div>
+          </div>
+          <div class="">
+            <div style=""><label>Survey Name II:</label></div>
+            <div style=""><input [readonly]="true" id="surveyName2" style="width:90%;"
+                [value]="(surveyItem.OMBSurveyNameII) ? surveyItem.OMBSurveyNameII : ''"></div>
+          </div>
+
+        </div>
+
+        <div style="float: right; width: 50%; height: auto;">
+
+          <div class="">
+            <div style=""><label>Acronym:</label></div>
+            <div style=""><input [readonly]="true" id="acronym" style="width:90%;"
+                [value]="(surveyItem.Acronym) ? surveyItem.Acronym : ''"></div>
+          </div>
+          <div class="">
+            <div style=""><label>Data Collection Mode:</label></div>
+            <div style=""><input [readonly]="true" class="DataCollectionMode" style="width:90%;"
+                [value]="(surveyItem.MAINDataCollectionMode) ? surveyItem.MAINDataCollectionMode : ''"></div>
+          </div>
+        </div>
+
+      </div>
+    </p-panel>
+    <p-panel header="General Information" [collapsed]='true' [toggleable]="true"
+      [style]="{'margin-bottom':'20px', 'box-shadow':'rgb(51, 51, 51) 3px 4px 16px -3px'}">
+      <div class="sectionContainer" style="height: 565px;">
+        <div style="float: left; width: 50%; height: auto;">
+          <div class="" style="margin-top:0px;">
+            <div style=""><label>Mandatory/Voluntary:</label></div>
+            <div style=""><input [readonly]="true" id="mandatoryVoluntary" style="width:90%;"
+                [value]="(surveyItem.OMBMandatoryVoluntary) ? surveyItem.OMBMandatoryVoluntary : ''"></div>
+          </div>
+          <div class="" style="margin-top:0px;">
+            <div style=""><label>Frequency of Reporting:</label></div>
+            <div style=""><input [readonly]="true" id="frequencyOfReporting" style="width:90%;"
+                [value]="(surveyItem.OMBFrequencyOfReporting) ? surveyItem.OMBFrequencyOfReporting : ''"></div>
+          </div>
+          <div class="" style="margin-top:0px;">
+            <div style=""><label>Number of Respondents:</label></div>
+            <div style=""><input [readonly]="true" id="numOfRespondents" style="width:90%;"
+                [value]="(surveyItem.OMBNumofRespondents) ? surveyItem.OMBNumofRespondents : ''"></div>
+          </div>
+          <div class="" style="margin-top:0px;">
+            <div style=""><label>Number of Respondents (Average):</label></div>
+            <div style=""><input [readonly]="true" id="numOfRespondents" style="width:90%;"
+                [value]="(surveyItem.OMBNumofRespondentsAVG) ? surveyItem.OMBNumofRespondentsAVG : ''"></div>
+          </div>
+          <div class="" style="margin-top:0px;">
+            <div style=""><label>Survey Indicator:</label></div>
+            <div style=""><input [readonly]="true" class="indicator" style="width:90%;"
+                [value]="(surveyItem.MAINIndicator) ? surveyItem.MAINIndicator : ''"></div>
+          </div>
+          <div class="" style="margin-top:0px;">
+            <div style=""><label>Reimbursable:</label></div>
+            <div style=""><input [readonly]="true" class="reimbursable" style="width:90%;"
+                [value]="(surveyItem.MAINReimbursable) ? surveyItem.MAINReimbursable : ''"></div>
+          </div>
+          <div class="" style="margin-top:0px;" *ngIf="surveyItem.MAINReimbursable.value == 'Yes' || surveyItem.MAINReimbursable == 'Yes'">
+            <div style=""><label>Sponsor:</label></div>
+            <div style=""><input [readonly]="true" class="sponsor" style="width:90%;"
+                [value]="(surveyItem.MAINSponsor) ? surveyItem.MAINSponsor : ''"></div>
+          </div>
+          <div class="" style="margin-top:0px;">
+            <div style=""><label>Is this a sample survey?</label></div>
+            <div style=""><input [readonly]="true" class="sampleTaken" style="width:90%;"
+                [value]="(surveyItem.MAINSampleTaken) ? surveyItem.MAINSampleTaken : ''"></div>
+          </div>
+          <div class="" style="margin-top:0px;">
+            <div style=""><label>When was the last sample taken?</label></div>
+            <div style=""><input [readonly]="true" class="sampleYear" style="width:90%;"
+                [value]="(surveyItem.MAINSampleYear) ? surveyItem.MAINSampleYear : ''"></div>
+          </div>
+          <div class="" style="margin-top:0px;">
+            <div style=""><label>Sample Size:</label></div>
+            <div style=""><input id="sampleSize" [readonly]="true" style="width:90%;"
+                [value]="(surveyItem.HUBSampleSize) ? surveyItem.HUBSampleSize : ''"></div>
+          </div>
+        </div>
+        <div style="float: right; width: 50%; height: auto;">
+          <div class="" style="margin-top:0px;">
+            <div style=""><label>Authority:</label></div>
+            <div style=""><textarea [readonly]="true" style="width:95%; height:100px;" id="authority"
+                [value]="(surveyItem.OMBAuthority) ? surveyItem.OMBAuthority : ''"></textarea></div>
+          </div>
+          <div class="" style="margin-top:0px;">
+            <div style=""><label>Confidentiality:</label></div>
+            <div style=""><textarea [readonly]="true" id="confidentiality" style="width:95%; height:100px;"
+                [value]="(surveyItem.MAINConfidentiality) ? surveyItem.MAINConfidentiality : ''"></textarea></div>
+          </div>
+          <div class="" style="">
+            <div class="" style="margin-top:0px; ">
+              <div style=""><label>Form Number Paths:</label><br /><textarea [readonly]="true"
+                  style="width:95%; height:100px;" id="formNumPaths"
+                  [value]="(surveyItem.OMBFormNumPaths) ? surveyItem.OMBFormNumPaths : ''"></textarea></div>
+            </div>
+            <div class="" style="margin-top:0px;">
+              <div style=""><label>Avg. Time to Complete:</label><br /><textarea [readonly]="true"
+                  style="width:95%; height:100px;" id="avgTimeToComplete"
+                  [value]="(surveyItem.OMBAvgTimetoComplete) ? surveyItem.OMBAvgTimetoComplete : ''"></textarea></div>
+              <div style=""></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-panel>
+    <p-panel header="Contact Information" [collapsed]='true' [toggleable]="true"
+      [style]="{'margin-bottom':'20px', 'box-shadow':'rgb(51, 51, 51) 3px 4px 16px -3px'}">
+      <div class="sectionContainer" style="height: 230px;">
+        <div style="float: left; width: 50%; height: auto;">
+          <div class="">
+            <div style=""><label>Directorate:</label></div>
+            <div style=""><input [readonly]="true" id="directorate" style="width:90%;"
+                [value]="(surveyItem.OMBDirectorate) ? surveyItem.OMBDirectorate : ''"></div>
+          </div>
+          <div class="">
+            <div style=""><label>Division:</label></div>
+            <div style=""><input [readonly]="true" id="division" style="width:90%;"
+                [value]="(surveyItem.OMBDivision) ? surveyItem.OMBDivision : ''"></div>
+          </div>
+          <div class="">
+            <div style=""><label>Bureau Contact:</label></div>
+            <div style=""><input [readonly]="true" class="bureauContact" style="width:90%;"
+                [value]="(surveyItem.MAINBureauContact) ? surveyItem.MAINBureauContact : ''"></div>
+          </div>
+          <div class="">
+            <div style=""><label>Bureau Contact Email:</label></div>
+            <div style=""><input [readonly]="true" [readonly]="true" class="bureauContactEmail" style="width:90%;"
+                [value]="(surveyItem.MAINBureauContactEmail) ? surveyItem.MAINBureauContactEmail : ''"></div>
+          </div>
+        </div>
+        <div style="float: right; width: 50%; height: auto;">
+          <div class="">
+            <div style=""><label>Bureau Contact Number:</label></div>
+            <div style=""><input [readonly]="true" class="bureauContactNumber" style="width:90%;"
+                [value]="(surveyItem.MAINBureauContactNumber) ? surveyItem.MAINBureauContactNumber : ''"></div>
+          </div>
+          <div class="">
+            <div style=""><label>NPC/HQ Phone Number:</label></div>
+            <div style=""><input [readonly]="true" class="npcPhoneNumber" style="width:90%;"
+                [value]="(surveyItem.MAINNPCPhoneNumber) ? surveyItem.MAINNPCPhoneNumber : ''"></div>
+          </div>
+          <div class="">
+            <div style=""><label>NPC/HQ Hours of Operation:</label></div>
+            <div style=""><input [readonly]="true" class="npcPhoneNumber" style="width:90%;"
+                [value]="(surveyItem.MAINNPCHours) ? surveyItem.MAINNPCHours : ''"></div>
+          </div>
+        </div>
+      </div>
+    </p-panel>
+    <p-panel header="Collections" [collapsed]='true' [toggleable]="true"
+      [style]="{'margin-bottom':'20px', 'box-shadow':'rgb(51, 51, 51) 3px 4px 16px -3px'}">
+      <div class="" style="padding: 15px 0px 20px 20px !important; height: 100px;">
+        <div style="display: inline-flex">
+          <div style="width: 270px">
+            <label style="">Frequency Of Reporting:</label>
+            <br />
+            <input [readonly]="true" [value]="(surveyItem.OMBFrequencyOfReporting) ? surveyItem.OMBFrequencyOfReporting : ''">
+          </div>
+          <!-- <div style="width: 270px">
+            <label style="">Centurion Open:</label>
+            <br />
+            <input pInputText [(ngModel)]="surveyItem.CenturionOpen"
+              (keydown.enter)="updatedMessage(surveyItem.CenturionOpen, 'Centurion Open')"
+              (blur)="updatedMessage(surveyItem.CenturionOpen, 'Centurion Open')"
+              (focus)="storeCurrentVal(surveyItem.CenturionOpen)" [readonly]="ombEdit" class="" style=""
+              [value]="(surveyItem.CenturionOpen) ? surveyItem.CenturionOpen : ''">
+          </div>
+          <div style="width: 270px">
+            <label style="">Centurion Closed:</label>
+            <br />
+            <input pInputText [(ngModel)]="surveyItem.CenturionClosed"
+              (keydown.enter)="updatedMessage(surveyItem.CenturionClosed, 'Centurion Closed')"
+              (blur)="updatedMessage(surveyItem.CenturionClosed, 'Centurion Closed')"
+              (focus)="storeCurrentVal(surveyItem.CenturionClosed)" [readonly]="ombEdit" class="" style=""
+              [value]="(surveyItem.CenturionClosed) ? surveyItem.CenturionClosed : ''">
+          </div> -->
+        </div>
+        <!--{{ surveyItem.OMBFrequencyOfReporting }}-->
+      </div>
+      <p-table #dt [value]="collectionData.d.results" [columns]="cols">
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'display': col.display}">
+              {{col.header}}
+              <!--<p-sortIcon [field]="col.field"></p-sortIcon>-->
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+          <tr>
+            <td *ngFor="let col of columns" [ngStyle]="{'display': col.display}">
+              {{rowData[col.field]}}
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+          <tr>
+            <td [attr.colspan]="colSpan" style="text-align:center;">
+              No records found
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-panel>
+    <p-panel header="Web Links" [collapsed]='true' [toggleable]="true"
+      [style]="{'margin-bottom':'20px', 'box-shadow':'rgb(51, 51, 51) 3px 4px 16px -3px'}">
+      <div class="sectionContainer">
+        <div class="webLinks">
+          <div style="">
+            <div id="surveyWebsiteLink" (click)='openWebLink(surveyItem.LinkSurveyWebsite)' class="webLinksbutton btn"
+              style="background-color: #d9534f;">Survey
+              Website</div>
+          </div>
+          <div style=" margin-left:20px; color: #000;">
+            <div class="surveyWebsiteDesc">{{ (surveyItem.LinkSurveyWebsiteDesc) ? surveyItem.LinkSurveyWebsiteDesc :
+              '' }}</div>
+          </div>
+        </div>
+        <div class="webLinks" style="display:none;">
+          <div style="">
+            <div id="surveyRespondentLink" class="webLinksbutton btn" style="background-color: #f0ad4e;">Respondent
+              Information</div>
+          </div>
+          <div style=" margin-left:20px; color: #000;">
+            <div class="surveyRespondentDesc"></div>
+          </div>
+        </div>
+        <div class="webLinks">
+          <div style="">
+            <div id="surveyFormsLink" (click)='openWebLink(surveyItem.LinkForms)' class="webLinksbutton btn"
+              style="background-color: #5bc0de;">Forms</div>
+          </div>
+          <div style=" margin-left:20px; color: #000;">
+            <div class="surveyFormsDesc">{{ (surveyItem.LinkFormsDesc) ? surveyItem.LinkFormsDesc : '' }}</div>
+          </div>
+        </div>
+        <div class="webLinks">
+          <div style="">
+            <div id="surveyDataLink" (click)='openWebLink(surveyItem.LinkSurveyData)' class="webLinksbutton btn"
+              style="background-color: #4E5D6C;">Survey
+              Data</div>
+          </div>
+          <div style=" margin-left:20px; color: #000;">
+            <div class="surveyDataDesc">{{ (surveyItem.LinkSurveyDataDesc) ? surveyItem.LinkSurveyDataDesc : '' }}</div>
+          </div>
+        </div>
+        <!--<div class="webLinks">
+          <div style="">
+            <div id="surveyCollectionLink" (click)='openWebLink(surveyItem.LinkCollectionStrategy)'
+              class="webLinksbutton btn" style="background-color: #DF691A;">Collection
+              Strategy</div>
+          </div>
+          <div style=" margin-left:20px; color: #000;">
+            <div class="surveyCollectionDesc">{{ (surveyItem.LinkCollectionStrategyDesc) ?
+              surveyItem.LinkCollectionStrategyDesc : '' }}</div>
+          </div>
+        </div>-->
+        <div class="webLinks">
+          <div style="">
+            <div id="surveyVisualizationLink" (click)='openWebLink(surveyItem.LinkVisualization)'
+              class="webLinksbutton btn" style="background-color: #5cb85c;">Visualizations</div>
+          </div>
+          <div style=" margin-left:20px; color: #000;">
+            <div class="surveyVisualizationDesc">{{ (surveyItem.LinkVisualizationDesc) ?
+              surveyItem.LinkVisualizationDesc : '' }}</div>
+          </div>
+        </div>
+        <div class="webLinks">
+          <div style="">
+            <div id="surveyFlyersLink" (click)='openWebLink(surveyItem.LinkFlyers)' class="webLinksbutton btn"
+              style="background-color: #d9534f;">Flyers</div>
+          </div>
+          <div style=" margin-left:20px; color: #000;">
+            <div class="surveyFlyersDesc webLinksDesc">{{ (surveyItem.LinkFlyersDesc) ? surveyItem.LinkFlyersDesc : ''
+              }}</div>
+          </div>
+        </div>
+        <div class="webLinks">
+          <div style="">
+            <div id="surveyTipsLink" (click)='openWebLink(surveyItem.LinkTips)' class="webLinksbutton btn"
+              style="background-color: #f0ad4e;">Tips</div>
+          </div>
+          <div style=" margin-left:20px; color: #000;">
+            <div class="surveyTipsDesc">{{ (surveyItem.LinkTipsDesc) ? surveyItem.LinkTipsDesc : '' }}</div>
+          </div>
+        </div>
+        <div class="webLinks">
+          <div>
+            <div (click)="openWebLink(surveyItem.LinkRespondent)" class="webLinksbutton btn"
+              style="background-color: #5cb85c;">Respondent Info</div>
+          </div>
+          <div style=" margin-left:20px; color: #000;">
+            <div class="surveyTipsDesc">{{ (surveyItem.LinkRespondentDesc) ? surveyItem.LinkRespondentDesc : '' }}</div>
+          </div>
+        </div>
+      </div>
+    </p-panel>
+  </div>
+</div>

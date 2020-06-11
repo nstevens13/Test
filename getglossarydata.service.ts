@@ -6,9 +6,10 @@ import { map, catchError, tap } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class SectiondataService {
+export class GetglossarydataService {
 
   constructor(private http: HttpClient) {
+
   }
 
   private extractData(res: Response) {
@@ -17,13 +18,11 @@ export class SectiondataService {
     return body || {};
   }
 
-  getSectionData(): Observable<any> {
+  getGlossaryData(): Observable<any> {
     const headers = new HttpHeaders().set('Accept', 'application/json;odata=verbose');
     // return this.http.get<MyData>('https://collab.ecm.census.gov/dir/adep/apps/csit/_vti_bin/listdata.svc/SiteConfiguration', {headers});
     // return this.http.get('https://api.openweathermap.org/data/2.5/forecast?id=3362024&APPID=bbcf57969e78d1300a815765b7d587f0');
-    return this.http.get('https://uscensus.sharepoint.com/teams/ADEP/apps/csit/_vti_bin/listdata.svc/SectionInventory', { headers })
-      .pipe(map(this.extractData));
+    return this.http.get('https://uscensus.sharepoint.com/teams/ADEP/apps/csit/_vti_bin/listdata.svc/FieldInfo?$filter=ShowVisitor eq true',
+      { headers }).pipe(map(this.extractData));
   }
-
-
 }

@@ -1,0 +1,61 @@
+<link rel="stylesheet" type="text/css"
+    href="https://uscensus.sharepoint.com/teams/ADEP/apps/csit/SitePages/PrimeNG/primeicons.css" />
+<link rel="stylesheet" type="text/css"
+    href="https://uscensus.sharepoint.com/teams/ADEP/apps/csit/SitePages/PrimeNG/theme.css" />
+<link rel="stylesheet" type="text/css"
+    href="https://uscensus.sharepoint.com/teams/ADEP/apps/csit/SitePages/PrimeNG/primeng.min.css" />
+
+<!--<ul>
+  <li *ngFor="let row of sectionData.d.results">{{ row.Title }}</li>
+</ul>-->
+<div style="text-align:center" class='' style="margin: auto; margin-top: 150px;">
+    <h2 style="color: #fff !important;text-align: center;margin-top: -50px;padding: 25px;">Survey Inventory</h2>
+    <p-table #dt [columns]="cols" [value]="inventoryData" [(selection)]="selectedData" class='componentContainer'
+        (onFilter)="onFilter($event, dt)">
+        <ng-template pTemplate="caption">
+            <!--<div style="text-align: right">
+            <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+            <input type="text" pInputText size="50" placeholder="Global Filter" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                style="width:auto">
+        </div>-->
+            <div class="ui-helper-clearfix">
+                <button class="btn btn-primary pi pi-download" type="button" title="Export to Excel"
+                    (click)="dt.exportCSV()" style="float:left; font-size: 2em;"></button>
+                <!--<button class="btn btn-primary" type="button" pButton icon="fa fa-file" iconPos="left" label="Selection Only"
+                    (click)="dt.exportCSV({selectionOnly:true})" style="float:right">Export Selection</button>-->
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns" [pSortableColumn]="col.field" [style.width]="col.width">
+                    {{col.header}}
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
+                <th style="width:9%"></th>
+            </tr>
+            <tr>
+                <th *ngFor="let col of columns" [style.width]="auto">
+                    <input pInputText type="text" (input)="dt.filter($event.target.value, col.field,'contains')"
+                        style="width:100%">
+                </th>
+                <th [style]="auto"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+                <td *ngFor="let col of columns" [style.text-align]="col.align">
+                    {{rowData[col.field]}}
+                </td>
+                <td style="text-align:center;">
+                    <button title="View Survey" class="btn btn-primary pi pi-info" (click)="openSurveyItem(rowData)"
+                        [ngStyle]="{'cursor': 'pointer', 'font-size': '2em'}"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <span style="color: white;">{{ filteredValuesLength || inventoryData?.length }} of {{inventoryData?.length}}
+                Total Surveys</span>
+        </ng-template>
+    </p-table>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="large" color="#fff" type="timer"></ngx-spinner>

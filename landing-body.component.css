@@ -1,0 +1,68 @@
+.landingPageText
+{
+    padding: 10px; 
+    font-size: 15.5px; 
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.4); 
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.4); 
+    background-color: rgb(78, 93, 108);
+    color: #fff;
+}
+
+
+.landingButtons1 {
+    background: transparent;
+    border: 2px solid #5cb85c;
+    margin: 29px;
+    margin-top: 40px;
+    
+    padding: 35px;
+    padding-top: 27px;
+    font-size: 20px;
+    box-shadow: -1px 1px 18px -2px #333;
+    color: #fff !important;
+    font-size: 28px;
+    text-decoration: none;    
+}
+
+.landingButtons1:hover {
+    border: 2px solid #5cb85c;
+    cursor: pointer;
+    background: #5cb85c;
+    text-decoration: none; 
+}
+
+
+.landingButtons2 {
+    background: transparent;
+    border: 2px solid #DF691A;
+    margin: 29px;
+    margin-top: 40px;
+    
+    padding: 35px;
+    padding-top: 27px;
+    font-size: 20px;
+    box-shadow: -1px 1px 18px -2px #333;
+    color: #fff !important;
+    font-size: 28px;
+    text-decoration: none;    
+}
+
+.landingButtons2:hover {
+    border: 2px solid #DF691A;
+    cursor: pointer;
+    background: #DF691A;
+    text-decoration: none;     
+}
+
+h1{
+    text-align: center;
+    text-decoration: underline;
+    color: #fff;
+    margin-top: .5rem; 
+}
+
+
+.ui-dialog-title{
+    color: #fff !important;
+}
+

@@ -1,0 +1,146 @@
+<link rel="stylesheet" type="text/css"
+  href="https://uscensus.sharepoint.com/teams/ADEP/apps/csit/SitePages/PrimeNG/primeicons.css" />
+<link rel="stylesheet" type="text/css"
+  href="https://uscensus.sharepoint.com/teams/ADEP/apps/csit/SitePages/PrimeNG/theme.css" />
+<link rel="stylesheet" type="text/css"
+  href="https://uscensus.sharepoint.com/teams/ADEP/apps/csit/SitePages/PrimeNG/primeng.min.css" />
+
+<div class="fixed-top" style="width: 70%; margin: auto; box-shadow: rgb(51, 51, 51) 3px 4px 16px -3px;">
+  <img class="" src="https://uscensus.sharepoint.com/teams/ADEP/apps/csit/Images1/ADEPCentral-CSITHeader.jpg"
+    style="width: 100%; box-shadow: rgb(51, 51, 51) 3px 4px 16px -3px;" usemap="#navBannerMap" />
+    <map name="navBannerMap" id="navBannerMap">
+      <area shape="rect" coords="-1,-2,101,117" href="https://uscensus.sharepoint.com/sites/censuscentral" target="_blank" alt="Return to Census Central" />
+      <area shape="rect" coords="99,0,274,114" href="https://uscensus.sharepoint.com/teams/ADEP/SitePages/Home.aspx" target="_blank" alt="Return to ADEP Central" />
+    </map>
+    
+  <nav class="navbar navbar-expand-md navbar-dark bg-primary" style="">
+    
+    <button class="navbar-toggler hidden-sm-up" type="button" (click)="isNavbarCollapsed = !isNavbarCollapsed"
+      data-target="#navbarsDefault" aria-controls="navbarsDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div  *ngIf="menuData.d" [ngbCollapse]="isNavbarCollapsed" class="collapse navbar-collapse" id="navbarsDefault">
+      <ul class="navbar-nav mr-auto">
+        <ng-container *ngFor="let item of menuData.d.results">
+          
+          <li><a class="nav-link" *ngIf="item.HasSubMenu != true && item.MenuTypeValue == 'Main'" [href]="item.ClickNav"
+              [target]="item.NewTargetValue || ''" style="font-size: 16px !important; color: #fff;">{{ item.Title }}</a>
+          </li>
+          <li class="nav-item dropdown" ngbDropdown *ngIf="item.HasSubMenu == true && item.MenuTypeValue == 'Main'"
+            style="cursor: pointer !important;">
+            <a class="nav-link dropdown-toggle" id="ddID" ngbDropdownToggle style="font-size: 16px !important; color: #fff;">
+              {{ item.Title }}</a>
+            <div class="dropdown-menu" aria-labelledby="ddID" ngbDropdownMenu>
+              <ng-container *ngFor="let subitem of menuData.d.results">
+                <ng-container *ngIf="subitem.MainParentId == item.Id">
+                  <a *ngIf="subitem.Title != 'Add New Survey'" class="dropdown-item" [href]="subitem.ClickNav"
+                    [target]="subitem.NewTargetValue || ''" style="font-size: 16px !important;">
+                    {{ subitem.Title }}</a>
+                  <span *ngIf="subitem.Title == 'Add New Survey'" class="dropdown-item" (click)="showNewDialog()"
+                    style="font-size: 16px !important;">
+                    {{ subitem.Title }}</span>
+                </ng-container>
+              </ng-container>
+            </div>
+          </li>
+          <li><span class="nav-link pi pi-envelope" *ngIf="item.HasSubMenu != true && item.MenuTypeValue == 'Contact'"
+              (click)="showDisplayDialog()" title="Contact Us"
+              style="font-size: 1.5em !important; color: #fff;cursor: pointer;background-color: #2B3E50 !important;color: #fff;border-radius: 3px;position: absolute;right: 1%; width: 47px; height: 45px;"></span>
+          </li>
+        </ng-container>
+        <!-- <li>
+          <span class="nav-link" style="font-size: 16px !important; color: #fff;cursor: pointer;background-color: #2B3E50 !important;color: #fff;border-radius: 3px;position: absolute;right: 110px;">
+            <a style="color: #fff;" href="im:<sip:jeffrey.jones@census.gov>">Chat</a>
+          </span>
+        </li> -->
+      </ul>
+    </div>
+  </nav>
+</div>
+
+<p-dialog header="Contact Us" [(visible)]="displayContact" [modal]="true" [responsive]="true"
+  [style]="{width: '350px', minWidth: '350px'}" [minY]="70" [maximizable]="false" [baseZIndex]="10000">
+  <div>
+    <div>
+      <label>Topic:</label>
+      <br />
+      <!--<input type="text" style="width:100% !important" />-->
+      <select [(ngModel)]="ContactObj.requestType">
+        <option></option>
+        <option>General Feedback</option>
+        <option *ngIf="router.url == '/adminInventory' || router.url == '/adminItem'">OMB Issue</option>
+        <option *ngIf="router.url == '/adminInventory' || router.url == '/adminItem'">Request Access</option>
+        <option *ngIf="router.url == '/adminInventory' || router.url == '/adminItem'">Request New Survey</option>
+        <option>Question</option>
+      </select>
+    </div>
+    <div *ngIf="ContactObj.requestType != 'Request New Survey' && ContactObj.requestType != 'Request Access'">
+      <div>
+        <label>Comment:</label>
+        <br />
+        <textarea [(ngModel)]="ContactObj.body" style="width:100% !important"></textarea>
+      </div>
+    </div>
+    <div *ngIf="ContactObj.requestType == 'Request Access'">
+      <div>
+        <label>Survey Name:</label>
+        <br />
+        <input type="text" [(ngModel)]="ContactObj.surveyName" style="width:100% !important" />
+      </div>
+      <div>
+        <label>User's Email Address:</label>
+        <br />
+        <input type="text" [(ngModel)]="ContactObj.usersEmail" style="width:100% !important" />
+      </div>
+    </div>
+    <div *ngIf="ContactObj.requestType == 'Request New Survey'">
+      <div>
+        <label>Survey Name:</label>
+        <br />
+        <input type="text" [(ngModel)]="ContactObj.surveyName" style="width:100% !important" />
+      </div>
+      <div>
+        <label>Acronym:</label>
+        <br />
+        <input type="text" [(ngModel)]="ContactObj.acronym" style="width:100% !important" />
+      </div>
+      <div>
+        <label>Survey Year:</label>
+        <br />
+        <input type="text" [(ngModel)]="ContactObj.surveyYear" style="width:100% !important" />
+      </div>
+    </div>
+    <div style="padding: 5px; margin-top: 50px;">
+      Your message will be sent to CSIT Tech Support
+    </div>
+  </div>
+  <p-footer>
+    <button title="Submit" type="button" class="btn btn-primary" style="cursor:pointer; height: 50px;" (click)="saveContactUs('')"><i class="pi pi-check" style="font-size: 2em"></i></button>
+    <button title="Cancel" type="button" class="btn btn-primary" style="cursor:pointer; height: 50px;" (click)="displayContact=false"><i class="pi pi-times" style="font-size: 2em"></i></button>
+  </p-footer>
+</p-dialog>
+
+<p-dialog header="New Survey" [(visible)]="displayNewSurvey" [modal]="true" [responsive]="true"
+  [style]="{width: '350px', minWidth: '350px'}" [minY]="70" [maximizable]="false" [baseZIndex]="10000">
+  <div>
+    <div>
+      <label>Survey Name:</label>
+      <br />
+      <input type="text" [(ngModel)]="ContactObj.surveyName" style="width:100% !important" />
+    </div>
+    <div>
+      <label>Acronym:</label>
+      <br />
+      <input type="text" [(ngModel)]="ContactObj.acronym" style="width:100% !important" />
+    </div>
+    <div>
+      <label>Survey Year:</label>
+      <br />
+      <input type="text" [(ngModel)]="ContactObj.surveyYear" style="width:100% !important" />
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" class="btn btn-primary" pButton icon="" (click)="saveContactUs('New Survey Request');">Submit</button>
+    <button type="button" class="btn btn-primary" pButton icon="" (click)="displayNewSurvey=false">Cancel</button>
+  </p-footer>
+</p-dialog>

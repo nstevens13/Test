@@ -1,0 +1,35 @@
+<link rel="stylesheet" type="text/css"
+href="https://uscensus.sharepoint.com/teams/ADEP/apps/csit/SitePages/PrimeNG/primeicons.css" />
+<link rel="stylesheet" type="text/css"
+href="https://uscensus.sharepoint.com/teams/ADEP/apps/csit/SitePages/PrimeNG/theme.css" />
+<link rel="stylesheet" type="text/css"
+href="https://uscensus.sharepoint.com/teams/ADEP/apps/csit/SitePages/PrimeNG/primeng.min.css" />
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="large" color="#fff" type="timer"></ngx-spinner>
+<div *ngIf="glossaryData.d" style="text-align:center" class='' style="margin: auto; margin-top: 150px;">
+    <h2 style="color: #fff !important;text-align: center;margin-top: -50px;padding: 25px;">Glossary (<i title="Admin" class="pi pi-user" style="position: relative; top: 8px;"></i>)</h2>
+    <p-table #dt [columns]="cols" [value]="glossaryData.d.results" class='componentContainer'>
+        <ng-template pTemplate="caption">
+            <div style="text-align: right">
+                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                <input type="text" pInputText size="50" placeholder="Search" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                    style="width:auto">
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns" [pSortableColumn]="col.field" [style.width]="col.width">
+                    {{col.header}}
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+                <td *ngFor="let col of columns" [style.text-align]="col.align">
+                    {{rowData[col.field]}}
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

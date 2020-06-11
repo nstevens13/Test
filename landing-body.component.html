@@ -1,0 +1,85 @@
+<link rel="stylesheet" type="text/css"
+  href="https://uscensus.sharepoint.com/teams/ADEP/apps/csit/SitePages/PrimeNG/primeicons.css" />
+<link rel="stylesheet" type="text/css"
+  href="https://uscensus.sharepoint.com/teams/ADEP/apps/csit/SitePages/PrimeNG/theme.css" />
+<link rel="stylesheet" type="text/css"
+  href="https://uscensus.sharepoint.com/teams/ADEP/apps/csit/SitePages/PrimeNG/primeng.min.css" />
+  
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="large" color="#fff" type="timer"></ngx-spinner>
+<div style="text-align:center" class='' style="margin: auto; margin-top: 150px;">
+  <h2
+    style="color: #fff !important;text-align: center;margin-top: -50px;padding: 25px; text-shadow: 2px 2px 4px rgba(0,0,0,0.4);">
+    Welcome to the {{ title }}!
+  </h2>
+  <div style="height: 310px;">
+    <div class="" style="height: auto">
+      <div class="landingPageText" style="max-width:49.5%; float: left; height: 278px; overflow-y: auto;">
+        <p>The Census Survey Information Tool (CSIT) was created to serve as a repository of program level metadata in
+          an easily
+          accessible location for each of the Census Bureau’s business surveys.</p>
+        <p>The CSIT contains information such as: OMB numbers and expiration dates, the authority for collection,
+          frequency of the survey, if it is mandatory or voluntary, type of collection activities (e.g. mail out dates,
+          follow-up dates, etc.), form numbers, sample size, websites, and collection modes just to name a few.</p>
+        <p>The metadata provided is collected and maintained by the program area’s point of contact and updated
+          periodically.</p>
+      </div>
+    </div>
+    <div class="">
+      <div *ngIf="images.d" class="landingPageText" style="width:49.5%; float: right; height: 278px;">
+        <p-carousel headerText="Featured" [pageLinks]="images.d.results.length" [responsive]="true" [value]="images.d.results" numVisible="1"
+          autoplayInterval="8000" effectDuration="slow" circular="false">
+          <ng-template let-item pTemplate="item">
+            <img style="width: 100%; max-height: 190px; cursor: pointer;" [src]='item.__metadata.media_src'
+              *ngIf="item.ClickUrl" (click)="openPDF(item.ClickUrl)">
+            <img style="width: 100%; max-height: 190px; cursor: pointer;" [src]='item.__metadata.media_src'
+              *ngIf="item.ClickFunction" (click)="showDialog(item)">
+            <img style="width: 100%; max-height: 190px;" [src]='item.__metadata.media_src'
+              *ngIf="!item.ClickUrl && !item.ClickFunction">
+          </ng-template>
+        </p-carousel>
+      </div>
+    </div>
+  </div>
+  <hr style="height: 2px;">
+
+  <!-- Call to Action Section -->
+  <div>
+    <div class="">
+      <div class="" style="text-align:center;">
+        <a href="https://uscensus.sharepoint.com/:b:/t/ADEP/apps/csit/EdSA4CkjOGpHnO_VqcdI9ooBppc_mGatpqLUf8TdPlCFYQ?e=HLg8Q2"
+          target="_blank" style="float:left; width: 49.5%; text-decoration: none !important;">
+          <div class="landingButtons1" align="center">User Guide</div>
+        </a>
+        <a href="#surveyinventory" style="float:right; width: 49.5%; text-decoration: none !important;">
+          <div class="landingButtons2" align="center">Survey Inventory</div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<p-dialog header="Surveys In The Field" [(visible)]="display" [modal]="true" [responsive]="true"
+  [style]="{width: '370px', minWidth: '250px'}" [minY]="70" [maximizable]="false" [baseZIndex]="10000">
+    <!-- <ul>
+      <li>2018 Annual Business Survey (ABS)</li>
+      <li>2018 Annual Capital Expenditures Survey (ACES)</li>
+      <li>2018 Annual Retail Trade Survey (ARTS)</li>
+      <li>Annual Wholesale Trade Survey (AWTS)</li>
+      <li>2018 Annual Survey of Manufactures (ASM)</li>
+      <li>2018 Business Research & Development Survey (BRDS)</li>
+      <li>2018 Report of Organization (COS)</li>
+      <li>2018 Service Annual Survey (SAS)</li>
+      <li>2019 Business & Professional Classification Report (SQ-CLASS)</li>
+      <li>2017 Economic Census (EC)</li>
+      <li>2017 Economic Census - Outlying Areas (EC)</li>
+      <li>2017 Economic Census Industry Classification Report (EC)</li>
+    </ul>   -->
+    <div [innerHTML]="comments"></div>
+  <p-footer>
+    <button type="button" class="btn btn-primary" pButton icon="" (click)="router.navigate(['/surveyinventory'])">View
+      Inventory</button>
+    <button type="button" class="btn btn-primary" pButton icon="" (click)="display=false">Close</button>
+  </p-footer>
+</p-dialog>

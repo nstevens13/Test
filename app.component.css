@@ -1,0 +1,5 @@
+:host ::ng-deep .ui-table .ui-table-thead > tr:first-child > th {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 154px;
+}
